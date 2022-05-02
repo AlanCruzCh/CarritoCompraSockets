@@ -26,6 +26,16 @@ class ListaProducto implements Serializable {
         }
         return posicion;
     }
+    public void eliminar_Producto_sin_stock(){
+        for (int i = 0; i < listaProductos.size(); i++) {
+            if(listaProductos.get(i).stock_Producto == 0){
+                System.out.println("\nProducto no disponible");
+                System.out.println("\nEl producto con el id: "+ listaProductos.get(i).id_Producto +" se eliminara de la lista"
+                        + "de productos");
+                listaProductos.remove(i);
+            }
+        }
+    }
 }
 
 /**
@@ -40,7 +50,6 @@ class Producto implements Serializable {
     public String descripcion_Producto;
     public float precio_Producto;
     public int stock_Producto;
-
     public Producto(int id, String nombre, String colores[], String ruta_Imagen,
              String descripcion, float precio, int stock) {
         this.id_Producto = id;
@@ -59,26 +68,26 @@ class Producto implements Serializable {
  */
 class ProductoAlCarrito {
     public int id_ProductoCarrito;
-    public int cantidad_ProductoCarrito;
     public String nombre_Producto;
-    public ProductoAlCarrito(int id, String nombre, int cantidad) {
+    public int cantidad_ProductoCarrito;
+    public float precio_Producto;
+    public float cantidad_pagar;
+    public ProductoAlCarrito(int id, String nombre, int cantidad, float precio ,float pago) {
         this.id_ProductoCarrito = id;
         this.nombre_Producto = nombre;
         this.cantidad_ProductoCarrito = cantidad;
+        this.precio_Producto = precio;
+        this.cantidad_pagar = pago;
     }
 }
-
 /**
  * Clase que nos guarda el producto al carrito de compra Clase para el cliente
  */
 class CarritoCompra {
-
     ArrayList<ProductoAlCarrito> carritoProductos;
-
     public CarritoCompra() {
         carritoProductos = new ArrayList<>();
     }
-
     public int buscar_indice_carrito(int id) {
         int posicion = 0;
         for (int i = 0; i < carritoProductos.size(); i++) {
@@ -89,9 +98,18 @@ class CarritoCompra {
         }
         return posicion;
     }
-
     public void agregarProductoCarrito(ProductoAlCarrito nuevo_Producto) {
         carritoProductos.add(nuevo_Producto);
+    }
+    public void mostrarCarritoProductos(){
+        System.out.println("\nSu carrito de compra contiene los siguientes elementos");
+        for (int i = 0; i < carritoProductos.size(); i++) {
+            System.out.println("\nID: " + carritoProductos.get(i).id_ProductoCarrito 
+            + " Nombre producto: " + carritoProductos.get(i).nombre_Producto
+            + " Cantidad del producto: " + carritoProductos.get(i).cantidad_ProductoCarrito
+            + " Precio: " + carritoProductos.get(i).precio_Producto
+            + " Cantidad a pagar: " + carritoProductos.get(i).cantidad_pagar);
+        }
     }
 }
 
@@ -102,7 +120,7 @@ public class pruebas {
          * Iniciamos el arraylist llamada listProducto en la cual guardaremos
          * nuestros productos
          */
-        try {
+        //try {
             ListaProducto listProducto = new ListaProducto();
 
             String[] colores_goober_candy = new String[]{"Azul", "Amarillo"};
@@ -128,21 +146,23 @@ public class pruebas {
             String[] colores_Pinguinos_fresa = new String[]{"Rojo", "Rosa"};
             Producto Pinguinos_fresa = new Producto(5, "Pinguinos fresa", colores_Pinguinos_fresa,
                     "ImagenesProductos/Pinguinos_fresa.jpg", "Panque de chocolate con relleno cremoso sabor "
-                    + "fresa y ganache de chocolate", 15.0f, 100);
+                    + "fresa y ganache de chocolate", 15.0f, 0);
 
             listProducto.agregarListaProducto(goobers_candy);
             listProducto.agregarListaProducto(betty_crocker_cake);
             listProducto.agregarListaProducto(caprince_naturals);
             listProducto.agregarListaProducto(Naturalmilk);
             listProducto.agregarListaProducto(Pinguinos_fresa);
-
+            int pos = listProducto.buscar_indice_producto(5);
+            
             /**
              * br es el buffer para solicitar los datos de entrada al usuario
              * productos_Carrito es el arraylist que contendra los productos que
              * seran agregados al carrito de compra condicion_Seguir_Comprando
              * es la condicion de paro del bucle while para seguir agregando
              * producos al carrito de compra
-             */
+             
+            
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             CarritoCompra productos_Carrito = new CarritoCompra();
             boolean condicion_Seguir_Comprando = true;
@@ -173,9 +193,13 @@ public class pruebas {
                         // el producto es  nuevo
                         if(cantidad_producto_solicitado >= 1 && cantidad_producto_solicitado <= 
                                 listProducto.listaProductos.get(posicio_id_producto_encontrado).stock_Producto){
+                            float pago = cantidad_producto_solicitado * listProducto.listaProductos.get
+                                (posicion_producto_solicitado).precio_Producto;
                             ProductoAlCarrito nuevo_producto = new ProductoAlCarrito(id_producto_solicitado, 
                                     listProducto.listaProductos.get(posicio_id_producto_encontrado).nombre_Producto, 
-                                    cantidad_producto_solicitado);
+                                    cantidad_producto_solicitado, 
+                                    listProducto.listaProductos.get(posicion_producto_solicitado).precio_Producto, 
+                                    pago);
                             productos_Carrito.agregarProductoCarrito(nuevo_producto);
                         }
                         //el producto ya esta en el carrito
@@ -204,9 +228,10 @@ public class pruebas {
                     System.out.println("\nGracias por su compra");
                 }
             }
-        } catch (IOException e) {
-            e.getStackTrace();
-        }
-
+            */
+        //} catch (IOException e) {
+          //  e.getStackTrace();
+        //}
+        
     }
 }
