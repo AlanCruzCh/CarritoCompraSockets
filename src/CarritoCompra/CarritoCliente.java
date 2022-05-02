@@ -60,7 +60,159 @@ public class CarritoCliente extends Clases_del_Cliente {
             fis.close();
             
             // Hacemos el menu con el cual el usuario interactuara
+            lista_productos_disponibles.mostrar_Productos();
+            int seguir_comprando = 1;
             
+            // Inicializamos nuestra lista de productos que contendra nuestro carrito de compra
+            CarritoCompra lista_del_carrito = new CarritoCompra();
+            
+            // Hacemos un ciclo para que la accion de comprar se repita hasta que el usuario tenga todos sus productos que desea
+            while (seguir_comprando == 1) {                
+                System.out.println("\n*****************************************************");
+                System.out.println("\nElija una opción para hacer en el menu"
+                        + "\nAgregar producto al carrito = 1 \nConsultar carrito = 2"
+                        + "\nEliminar producto del carrito = 3 \nComprar productos del carrito = 4");
+                int opcion_menu = Integer.parseInt(br.readLine());
+                switch(opcion_menu){
+                    
+                    // Opcion que nos permite agregar un producto al carrito de compra
+                    case 1:
+                        System.out.println("\nIngrese el id del producto: ");
+                        int id_producto = Integer.parseInt(br.readLine());
+                        int posicion_producto_deseado = lista_productos_disponibles.buscar_indice_producto(id_producto);
+                        
+                        // Corroboramos que el producto este disponible para agregarse al producto
+                        if(posicion_producto_deseado != -1){
+                            lista_productos_disponibles.mostrarProductoEspecifico(posicion_producto_deseado);
+                            System.out.println("\nEL siguiente producto se añadira a su carrito de compra\n Confirmar = 1"
+                                    + "Cancelar = 0");
+                            int confirmacion = Integer.parseInt(br.readLine());
+                            
+                            // Corroboramos que ese sea el producto que esta queriendo agregar al carrito
+                            if (confirmacion == 1) {
+                                
+                                // Solicitamos los datos que faltan para que se pueda crear el producto que ira al carrito
+                                System.out.println("\nDe que color seria su producto");
+                                String color = br.readLine();
+                                System.out.println("\nElija la cantidad del producto que desea");
+                                int cantidad = Integer.parseInt(br.readLine());        
+                                
+                                // Corroboramos si es que el producto es nuevo o ya existe en nuestro carrito de compras
+                                int posicion_prodcuto_en_carrito = lista_del_carrito.buscar_indice_carrito(id_producto);
+                                if(posicion_prodcuto_en_carrito == -1){
+                                    
+                                    // Producto nuevo
+                                    do {
+                                        
+                                        // corroboramos que la cantidad deseada sea menor que el stock disponible
+                                        if(lista_productos_disponibles.listaProductos.get(posicion_producto_deseado).
+                                                stock_Producto >= cantidad){
+                                            
+                                            // Creamos nuestro constructor del carrito de compra 
+                                            Producto_del_Carrito nuevoProducto = new Producto_del_Carrito(id_producto, 
+                                            lista_productos_disponibles.listaProductos.get(posicion_producto_deseado).
+                                            nombre_Producto, color, cantidad, 
+                                            lista_productos_disponibles.listaProductos.get(posicion_producto_deseado).
+                                            precio_Producto, cantidad * lista_productos_disponibles.listaProductos.get
+                                            (posicion_producto_deseado).precio_Producto);
+                                            
+                                            // Agregamos el producto al carrito
+                                            lista_del_carrito.agregarProductoCarrito(nuevoProducto);
+                                            nuevoProducto.mostrar_Producto_en_carrito();
+                                            System.out.println("\nNUEVO PRODUCTO AÑADIDO AL CARRITO");
+                                        }
+                                        
+                                        // si la cantidad es mayor al stock le pedimos al usuario que meta una cantidad correcta                                           y volvemos a comprobar que la cantidad sea menor
+                                        else{
+                                            System.out.println("\nLa cantidad que desea del producto supera la cantidad "
+                                                + "disponible del producto");
+                                            System.out.println("\nElija la cantidad del producto que desea");
+                                            int newcantidad = Integer.parseInt(br.readLine());
+                                            cantidad = newcantidad;
+                                        }
+                                        
+                                    // el ciclo que nos ayudara a que se compruebe nuevamente que la cantidad es correcta
+                                    } while (cantidad > lista_productos_disponibles.listaProductos.get
+                                        (posicion_producto_deseado).stock_Producto);
+                                }else{
+                                    
+                                    // El producto ya existe
+                                    int cantidad_mas_producto = lista_del_carrito.carrito_de_Productos.
+                                    get(posicion_prodcuto_en_carrito).cantidad_ProductoCarrito + cantidad;
+                                    
+                                    //Comprobamos que la cantidad no pase del stock diponible
+                                    do{
+                                        if(lista_productos_disponibles.listaProductos.get(posicion_producto_deseado).
+                                            stock_Producto >= cantidad_mas_producto){
+                                            
+                                            // Creamos nuestro constructor del carrito de compra 
+                                            Producto_del_Carrito nuevoProducto = new Producto_del_Carrito(id_producto, 
+                                            lista_productos_disponibles.listaProductos.get(posicion_producto_deseado).
+                                            nombre_Producto, color, cantidad, 
+                                            lista_productos_disponibles.listaProductos.get(posicion_producto_deseado).
+                                            precio_Producto, cantidad * lista_productos_disponibles.listaProductos.get
+                                            (posicion_producto_deseado).precio_Producto);
+                                            
+                                            // Agregamos el producto al carrito
+                                            lista_del_carrito.agregarProductoCarrito(nuevoProducto);
+                                            nuevoProducto.mostrar_Producto_en_carrito();
+                                            System.out.println("\nNUEVO PRODUCTO AÑADIDO AL CARRITO");
+                                        }
+                                        
+                                        // si la cantidad es mayor al stock le pedimos al usuario que meta una cantidad correcta                                           y volvemos a comprobar que la cantidad sea menor
+                                        else{
+                                            System.out.println("\nLa cantidad que desea del producto supera la cantidad "
+                                                + "disponible del producto");
+                                            System.out.println("\nCantidad disponible: " + (lista_productos_disponibles.
+                                            listaProductos.get(posicion_producto_deseado).stock_Producto - lista_del_carrito.
+                                            carrito_de_Productos.get(posicion_prodcuto_en_carrito).cantidad_ProductoCarrito));
+                                            System.out.println("\nElija la cantidad del producto que desea");
+                                            int newcantidad = Integer.parseInt(br.readLine());
+                                            cantidad = newcantidad;
+                                        }
+                                        
+                                    // el ciclo que nos ayudara a que se compruebe nuevamente que la cantidad es correcta
+                                    } while (cantidad_mas_producto > lista_productos_disponibles.listaProductos.get
+                                        (posicion_producto_deseado).stock_Producto);
+                                }
+                            } else {
+                                System.out.println("Accion de agregar producto al carrito cancelada");
+                            }
+                        }
+                        else{
+                            System.out.println("\nEl producto que usted desea no se encuentra disponible");
+                        }
+                        break;
+                    case 2:
+                        
+                        // Consultamos nuestro carrito de compra
+                        System.out.println("\nConsultando el carrito");
+                        lista_del_carrito.mostrarCarritoProductos();
+                        break;
+                        
+                    case 3:
+                        
+                        // eliminamos el producto con el id del indice que deseamos eliminar 
+                        System.out.println("\nIngre el id del producto que desea eliminar");
+                        int id_eliminar = Integer.parseInt(br.readLine());
+                        int posicion_en_carrito = lista_del_carrito.buscar_indice_carrito(id_eliminar);
+                        
+                        // comprobamos que el id del producto que vamos eliminar este en nuestro carrito
+                        if (posicion_en_carrito != 1) {
+                            lista_del_carrito.eliminarProductoCarrito(posicion_en_carrito, id_eliminar);
+                        } else {
+                            System.out.println("\nEl id que proporciono no es correcto\nOperacion cancelada");
+                        }
+                        break;
+                        
+                    default:
+                        
+                        // COMPRA DE PRODUCTOS DEL CARRITO
+                        break;
+                }
+                
+                
+            }
                 
             
             cliente.close();
