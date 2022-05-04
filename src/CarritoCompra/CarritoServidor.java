@@ -2,12 +2,15 @@ package CarritoCompra;
 
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CarritoServidor extends Clases_del_Servidor {
 
     public static void main(String[] args) {
         /**
-         * Declaramos la ruta donde se gurradara el archivo que vamos a descargar del cliente
+         * Declaramos la ruta donde se gurradara el archivo que vamos a
+         * descargar del cliente
          */
         File f = new File("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2\\practica1"
                 + "\\CarritoCompra\\src");
@@ -20,15 +23,15 @@ public class CarritoServidor extends Clases_del_Servidor {
         f2.setWritable(true);
 
         /**
-         * Creamos el arreglo de la lista de productos que vamos a mandar al cliente en el 
-         * cual guardaremos los productos que estan disponibles
+         * Creamos el arreglo de la lista de productos que vamos a mandar al
+         * cliente en el cual guardaremos los productos que estan disponibles
          */
         ListaProducto listProducto = new ListaProducto();
 
         /**
-         * Creamos los arreglos que contendran los colores de nuestros productos y usando el 
-         * constructor de Producto que se encuentra en la clase Clases_del_Servidor 
-         * instanciamos nuestros prodductos 
+         * Creamos los arreglos que contendran los colores de nuestros productos
+         * y usando el constructor de Producto que se encuentra en la clase
+         * Clases_del_Servidor instanciamos nuestros prodductos
          */
         String[] colores_goober_candy = new String[]{"Azul", "Amarillo"};
         Producto goobers_candy = new Producto(1, "Goober Candy", colores_goober_candy,
@@ -56,8 +59,9 @@ public class CarritoServidor extends Clases_del_Servidor {
                 + "cremoso sabor fresa y ganache de chocolate", 15.0f, 30);
 
         /**
-         * Agregamos los productos a la lista de productos creada con anteriodidad 
-         */ 
+         * Agregamos los productos a la lista de productos creada con
+         * anteriodidad
+         */
         listProducto.agregarListaProducto(goobers_candy);
         listProducto.agregarListaProducto(betty_crocker_cake);
         listProducto.agregarListaProducto(caprince_naturals);
@@ -113,102 +117,195 @@ public class CarritoServidor extends Clases_del_Servidor {
                     }
                 }// cierre del for 
 
-                /**
-                 * Iniciamos un segundo buffer para recibir la accion de lo que
-                 * debe hacer el socket proveniente por parte del cliente
-                 */
-                BufferedReader br_accion = new BufferedReader(new InputStreamReader(cliente.
-                        getInputStream()));
-                int mensaje_respuesta = Integer.parseInt(br_accion.readLine());
-                br_accion.close();
-                /**
-                 * Hacemos nuestro menu
-                 */
-                switch (mensaje_respuesta) {
+                boolean accion = true;
+                do {
 
-                    case 1:
-                        /**
-                         * Esto es lo que haremos siempre que el servidor recibe
-                         * 1 como respuesta del cliente, esto nos dira que nos
-                         * esta solicitando que le mandemos el archivo de
-                         * productos disponibles
-                         *
-                         * Serializamos nuestro archivo que es el que mandaremos
-                         * al cliente
-                         */
-                        cliente = servidor.accept();
-                        System.out.println("\nSerializando nuestra lista de articulos para el "
-                                + "cliente");
-                        FileOutputStream fos = new FileOutputStream("C:\\Users\\Alan\\Documents"
-                                + "\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra\\src\\"
-                                + "Productos_en_servidor\\lista_productos_disponibles.txt");
-                        ObjectOutputStream oos = new ObjectOutputStream(fos);
-                        oos.writeObject(listProducto);
-                        oos.close();
-                        fos.close();
-                        
-                        /**
-                         * Preparamos las variables con los datos que vamos a
-                         * necesitar para mandarlas al cliente
-                         */
-                        File archivo_al_cliente = new File("C:\\Users\\Alan\\Documents"
-                                + "\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra\\src\\"
-                                + "Productos_en_servidor\\lista_productos_disponibles.txt");
-                        String ruta_archivo = archivo_al_cliente.getAbsolutePath();
-                        String nombre_archivo = archivo_al_cliente.getName();
-                        long tamaño_archivo = archivo_al_cliente.length();
+                    /**
+                     * Iniciamos un segundo buffer para recibir la accion de lo
+                     * que debe hacer el socket proveniente por parte del
+                     * cliente
+                     */
+                    BufferedReader br_accion = new BufferedReader(new InputStreamReader(cliente.
+                            getInputStream()));
+                    int mensaje_respuesta = Integer.parseInt(br_accion.readLine());
+                    br_accion.close();
+                    /**
+                     * Hacemos nuestro menu
+                     */
+                    
+                    
+                    switch (mensaje_respuesta) {
 
-                        /**
-                         * Definimos dos flujos orientados a bytes, uno para
-                         * leer el archivo y otro para mandarlo por el socket
-                         */
-                        DataOutputStream dos_envio = new DataOutputStream(cliente.
-                                getOutputStream());
-                        DataInputStream dis_envio = new DataInputStream(new FileInputStream
-                                (ruta_archivo));
+                        case 1:
+                            
+                            /**
+                             * Aceptamos una nueva conexion de tipo socket para poder mandar los
+                             * archivos al cliente
+                             */
+                            cliente = servidor.accept();
+                            /**
+                             * Esto es lo que haremos siempre que el servidor
+                             * recibe 1 como respuesta del cliente, esto nos
+                             * dira que nos esta solicitando que le mandemos el
+                             * archivo de productos disponibles
+                             *
+                             * Serializamos nuestro archivo que es el que
+                             * mandaremos al cliente
+                             */
+                            System.out.println("\nSerializando nuestra lista de articulos para "
+                                    + "el cliente");
+                            FileOutputStream fos = new FileOutputStream("C:\\Users\\Alan\\"
+                                    + "Documents\\noveno_semestre\\Redes 2\\practica1\\"
+                                    + "CarritoCompra\\src\\Productos_en_servidor\\"
+                                    + "lista_productos_disponibles.txt");
+                            ObjectOutputStream oos = new ObjectOutputStream(fos);
+                            oos.writeObject(listProducto);
+                            oos.close();
+                            fos.close();
 
-                        /**
-                         * Enviamos los datos generales del archivo por el
-                         * socket
-                         */
-                        dos_envio.writeUTF(nombre_archivo);
-                        dos_envio.flush();
-                        dos_envio.writeLong(tamaño_archivo);
-                        dos_envio.flush();
+                            /**
+                             * Preparamos las variables con los datos que vamos
+                             * a necesitar para mandarlas al cliente
+                             */
+                            File archivo_al_cliente = new File("C:\\Users\\Alan\\Documents"
+                                    + "\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra\\src"
+                                    + "\\Productos_en_servidor\\"
+                                    + "lista_productos_disponibles.txt");
+                            String ruta_archivo = archivo_al_cliente.getAbsolutePath();
+                            String nombre_archivo = archivo_al_cliente.getName();
+                            long tamaño_archivo = archivo_al_cliente.length();
 
-                        /**
-                         * Leemos los datos contenidos en el archivo en paquetes
-                         * de 1024 bytes y lo enviamos por el socket
-                         */
-                        byte[] b_envio = new byte[1024];
-                        long enviados = 0;
-                        int porcentaje, n_envio;
-                        while (enviados < tamaño_archivo) {
-                            n_envio = dis_envio.read(b_envio);
-                            dos_envio.write(b_envio, 0, n_envio);
+                            /**
+                             * Definimos dos flujos orientados a bytes, uno para
+                             * leer el archivo y otro para mandarlo por el
+                             * socket
+                             */
+                            DataOutputStream dos_envio = new DataOutputStream(cliente.
+                                    getOutputStream());
+                            DataInputStream dis_envio = new DataInputStream(new 
+                                    FileInputStream(ruta_archivo));
+
+                            /**
+                             * Enviamos los datos generales del archivo por el
+                             * socket
+                             */
+                            dos_envio.writeUTF(nombre_archivo);
                             dos_envio.flush();
-                            enviados = enviados + n_envio;
-                            porcentaje = (int) (enviados * 100 / tamaño_archivo);
-                            System.out.print("\nArchivo enviado: " + porcentaje + "%\r");
-                        }// cerramos el while
+                            dos_envio.writeLong(tamaño_archivo);
+                            dos_envio.flush();
 
+                            /**
+                             * Leemos los datos contenidos en el archivo en
+                             * paquetes de 1024 bytes y lo enviamos por el
+                             * socket
+                             */
+                            byte[] b_envio = new byte[1024];
+                            long enviados = 0;
+                            int n_envio;
+                            while (enviados < tamaño_archivo) {
+                                n_envio = dis_envio.read(b_envio);
+                                dos_envio.write(b_envio, 0, n_envio);
+                                dos_envio.flush();
+                                enviados = enviados + n_envio;
+                            }// cerramos el while
+
+                            /**
+                             * Cerramos los flujos, el socket, terminamos
+                             * bloques y cerramos flujos
+                             */
+                            
+                            System.out.println("El cliente nos ha pedido la opcion 1\nMandamos"
+                                    + "el archivo " + nombre_archivo);
+                            System.out.print("\n\nArchivo enviado\n");
+                            dos_envio.close();
+                            dis_envio.close();
+
+                            break;
+                        case 2:
+                            
+                            System.out.println("\nEl cliente nos ha solicitado la opcion 2\n"
+                                    + "Preparando al servidor para recibir el archivo que\n"
+                                    + "contiene la lista del carrito para ser procesada");
+                            
+                            /**
+                             * Aceptamos la conexion con el cliente por el cual nos mandara 
+                             * el archivo 
+                             */
+                            cliente = servidor.accept();
+                            DataInputStream dis = new DataInputStream(cliente.getInputStream());
+
+                            /**
+                             * Leemos los datos principales del archivo y creamos un flujo para
+                             * escribir el archivo de salida
+                             */
+                            byte[] b = new byte[1024];
+                            String nombre = dis.readUTF();
+                            long tam = dis.readLong();
+                            DataOutputStream dos = new DataOutputStream(new FileOutputStream(
+                                    ruta_descarga + nombre));
+
+                            /**
+                             * Preparamos los datos para recibir los paquetes de datos del
+                             * archivo
+                             */
+                            long recibidos = 0;
+                            int n;
+
+                            /**
+                             * Definimos el ciclo donde estaremos recibiendo los datos mandados
+                             * por el cliente
+                             */
+                            while (recibidos < tam) {
+                                n = dis.read(b);
+                                dos.write(b, 0, n);
+                                dos.flush();
+                                recibidos = recibidos + n;
+                            }// while
+                            
+                            System.out.println("\nArchivo " + nombre + " descargado");
+                            FileInputStream fis = new FileInputStream("C:\\Users\\Alan\\"
+                                + "Documents\\noveno_semestre\\Redes 2\\practica1\\"
+                                + "CarritoCompra\\src\\Productos_en_servidor\\"
+                                + "lista_productos_carrito.txt");
+                            ObjectInputStream ois = new ObjectInputStream(fis);
+                            CarritoCompra productos_del_cliente = (CarritoCompra)ois.
+                                    readObject();
+                            ois.close();
+                            fis.close();
+                            dos.close();
+                            dis.close();
+
+                            productos_del_cliente.mostrarCarritoProductos();
+                            break;
+                            
+                        default:
+                            System.out.println("\n Adios");
+                            accion = false;
+                            break;
+
+                    } // fin del sitch
+                    
+                    /**
+                     * Comprobamos si es que el cliente ha mandado una opcion para que el 
+                     * servidor la ejecute, si no ha mandado ninguna opcion salimos del ciclo
+                     */
+                    if( accion == true){
                         /**
-                         * Cerramos los flujos, el socket, terminamos bloques y
-                         * cerramos flujos
-                         */
-                        System.out.print("\n\nArchivo enviado\n");
-                        dos_envio.close();
-                        dis_envio.close();
+                         * Aceptamos una nueva conexion para el br_accion
+                        */
+                        cliente = servidor.accept();
+                    }
+                    else{
+                        System.out.println("\nSaliendo el bucle while");
+                    }
+                    
+                } while (accion == true);
 
-                        break;
-                    default:
-                        System.out.println("\n Adios");
-                        break;
-
-                } // fin del sitch
             } // fin del for
         } catch (IOException e) {
             e.getStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CarritoServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

@@ -54,6 +54,10 @@ public class CarritoCliente extends Clases_del_Cliente {
             solicitud.close();
             cliente.close();
 
+            /**
+             * Abrimos otra instancia de tipo socket para la descarga del
+             * archivo que nos manda el servidor para poder ser tratado
+             */
             cliente = new Socket(direccion_ip, puerto);
             DataInputStream dis = new DataInputStream(cliente.getInputStream());
 
@@ -97,15 +101,16 @@ public class CarritoCliente extends Clases_del_Cliente {
             cliente.close();
 
             int seguir_comprando = 1;
-
+            productos_disponibles.mostrar_Productos();
             /**
-             * Inicializamos nuestra lista de productos que contendra nuestro carrito de compra
+             * Inicializamos nuestra lista de productos que contendra nuestro
+             * carrito de compra
              */
             CarritoCompra lista_del_carrito = new CarritoCompra();
 
             /**
-             * Hacemos un ciclo para que la accion de comprar se repita hasta que el usuario    
-             * tenga todos sus productos que desea
+             * Hacemos un ciclo para que la accion de comprar se repita hasta
+             * que el usuario tenga todos sus productos que desea
              */
             while (seguir_comprando == 1) {
                 System.out.println("\n*****************************************************");
@@ -115,9 +120,10 @@ public class CarritoCliente extends Clases_del_Cliente {
                         + "= 4");
                 int opcion_menu = Integer.parseInt(datos_usuario.readLine());
                 switch (opcion_menu) {
-                    
+
                     /**
-                     * Opcion que nos permite agregar un producto al carrito de compra 
+                     * Opcion que nos permite agregar un producto al carrito de
+                     * compra
                      */
                     case 1:
                         System.out.println("\nIngrese el id del producto: ");
@@ -126,25 +132,24 @@ public class CarritoCliente extends Clases_del_Cliente {
                                 buscar_indice_producto(id_producto);
 
                         /**
-                         * Corroboramos que el producto este disponible para agregarse al 
-                         * producto 
+                         * Corroboramos que el producto este disponible para
+                         * agregarse al producto
                          */
-                         if (posicion_producto_deseado != -1) {
-                            productos_disponibles.mostrarProductoEspecifico
-                                (posicion_producto_deseado);
+                        if (posicion_producto_deseado != -1) {
+                            productos_disponibles.mostrarProductoEspecifico(posicion_producto_deseado);
                             System.out.println("\nEL siguiente producto se añadira a su carrito"
                                     + " de compra\n Confirmar = 1\nCancelar = 0");
                             int confirmacion = Integer.parseInt(datos_usuario.readLine());
 
                             /**
-                             * Corroboramos que ese sea el producto que esta queriendo agregar al
-                             * carrito
+                             * Corroboramos que ese sea el producto que esta
+                             * queriendo agregar al carrito
                              */
                             if (confirmacion == 1) {
 
                                 /**
-                                 * Solicitamos los datos que faltan para que se pueda crear el
-                                 * producto que ira al carrito
+                                 * Solicitamos los datos que faltan para que se
+                                 * pueda crear el producto que ira al carrito
                                  */
                                 System.out.println("\nDe que color seria su producto");
                                 String color = datos_usuario.readLine();
@@ -152,8 +157,8 @@ public class CarritoCliente extends Clases_del_Cliente {
                                 int cantidad = Integer.parseInt(datos_usuario.readLine());
 
                                 /**
-                                 * Corroboramos si es que el producto es nuevo o ya existe en 
-                                 * nuestro carrito de compras
+                                 * Corroboramos si es que el producto es nuevo o
+                                 * ya existe en nuestro carrito de compras
                                  */
                                 int posicion_prodcuto_en_carrito = lista_del_carrito.
                                         buscar_indice_carrito(id_producto);
@@ -165,41 +170,32 @@ public class CarritoCliente extends Clases_del_Cliente {
                                     do {
 
                                         /**
-                                         * corroboramos que la cantidad deseada sea menor que el
-                                         * stock disponible
+                                         * corroboramos que la cantidad deseada
+                                         * sea menor que el stock disponible
                                          */
-                                        if (productos_disponibles.listaProductos.get
-                                                (posicion_producto_deseado).stock_Producto >=
-                                                cantidad) {
+                                        if (productos_disponibles.listaProductos.get(posicion_producto_deseado).stock_Producto
+                                                >= cantidad) {
 
                                             /**
-                                             * Creamos nuestro constructor del carrito de compra
+                                             * Creamos nuestro constructor del
+                                             * carrito de compra
                                              */
-                                            Producto_del_Carrito nuevoProducto = new 
-                                                    Producto_del_Carrito(id_producto,
-                                                    productos_disponibles.listaProductos.get
-                                                    (posicion_producto_deseado).nombre_Producto,
-                                                    color, cantidad, productos_disponibles.
-                                                    listaProductos.get
-                                                    (posicion_producto_deseado).precio_Producto,
-                                                    (cantidad * productos_disponibles.
-                                                    listaProductos.get
-                                                    (posicion_producto_deseado).
-                                                    precio_Producto));
+                                            Producto_del_Carrito nuevoProducto = new Producto_del_Carrito(id_producto,
+                                                    productos_disponibles.listaProductos.get(posicion_producto_deseado).nombre_Producto,
+                                                    color, cantidad, productos_disponibles.listaProductos.get(posicion_producto_deseado).precio_Producto,
+                                                    (cantidad * productos_disponibles.listaProductos.get(posicion_producto_deseado).precio_Producto));
                                             /**
                                              * Agregamos el producto al carrito
                                              */
-                                            lista_del_carrito.agregarProductoCarrito
-                                                    (nuevoProducto);
+                                            lista_del_carrito.agregarProductoCarrito(nuevoProducto);
                                             nuevoProducto.mostrar_Producto_en_carrito();
                                             System.out.println("\nNUEVO PRODUCTO AÑADIDO AL "
                                                     + "CARRITO");
-                                        } 
-                                        
-                                        /**
-                                         * si la cantidad es mayor al stock le pedimos al usuario
-                                         * que meta una cantidad correcta y volvemos a comprobar
-                                         * que la cantidad sea menor
+                                        } /**
+                                         * si la cantidad es mayor al stock le
+                                         * pedimos al usuario que meta una
+                                         * cantidad correcta y volvemos a
+                                         * comprobar que la cantidad sea menor
                                          */
                                         else {
                                             System.out.println("\nLa cantidad que desea del "
@@ -213,104 +209,197 @@ public class CarritoCliente extends Clases_del_Cliente {
                                         }
 
                                         /**
-                                         * el ciclo que nos ayudara a que se compruebe nuevamente
-                                         * que la cantidad es correcta
+                                         * el ciclo que nos ayudara a que se
+                                         * compruebe nuevamente que la cantidad
+                                         * es correcta
                                          */
-                                    } while (cantidad > productos_disponibles.listaProductos.get
-                                            (posicion_producto_deseado).stock_Producto);
+                                    } while (cantidad > productos_disponibles.listaProductos.get(posicion_producto_deseado).stock_Producto);
                                 } else {
 
                                     /**
                                      * El producto ya existe
                                      */
-                                    int cantidad_mas_producto = lista_del_carrito.
-                                            carrito_de_Productos.get
-                                            (posicion_prodcuto_en_carrito).
-                                            cantidad_ProductoCarrito + cantidad;
+                                    int cantidad_mas_producto = lista_del_carrito.carrito_de_Productos.get(posicion_prodcuto_en_carrito).cantidad_ProductoCarrito + cantidad;
 
                                     /**
-                                     * Comprobamos que la cantidad no pase del stock diponible
+                                     * Comprobamos que la cantidad no pase del
+                                     * stock diponible
                                      */
                                     do {
-                                        if (productos_disponibles.listaProductos.get
-                                                (posicion_producto_deseado).stock_Producto >= 
-                                                cantidad_mas_producto) {
+                                        if (productos_disponibles.listaProductos.get(posicion_producto_deseado).stock_Producto
+                                                >= cantidad_mas_producto) {
 
                                             /**
-                                             * Creamos nuestro constructor del carrito de compra
+                                             * Creamos nuestro constructor del
+                                             * carrito de compra
                                              */
-                                            
-                                            Producto_del_Carrito nuevoProducto = new 
-                                                    Producto_del_Carrito(id_producto,
-                                                    productos_disponibles.listaProductos.get
-                                                    (posicion_producto_deseado).nombre_Producto,
-                                                    color, cantidad,productos_disponibles.
-                                                    listaProductos.get
-                                                    (posicion_producto_deseado).precio_Producto,
-                                                    (cantidad * productos_disponibles.
-                                                    listaProductos.get
-                                                    (posicion_producto_deseado).
-                                                    precio_Producto));
+                                            Producto_del_Carrito nuevoProducto = new Producto_del_Carrito(id_producto,
+                                                    productos_disponibles.listaProductos.get(posicion_producto_deseado).nombre_Producto,
+                                                    color, cantidad, productos_disponibles.listaProductos.get(posicion_producto_deseado).precio_Producto,
+                                                    (cantidad * productos_disponibles.listaProductos.get(posicion_producto_deseado).precio_Producto));
 
                                             /**
                                              * Agregamos el producto al carrito
                                              */
-                                            lista_del_carrito.agregarProductoCarrito
-                                                    (nuevoProducto);
+                                            lista_del_carrito.agregarProductoCarrito(nuevoProducto);
                                             nuevoProducto.mostrar_Producto_en_carrito();
                                             System.out.println("\nNUEVO PRODUCTO AÑADIDO AL "
                                                     + "CARRITO");
-                                        } 
-                                        
-                                        /**
-                                         * si la cantidad es mayor al stock le pedimos al usuario
-                                         * que meta una cantidad correcta y volvemos a comprobar
-                                         * que la cantidad sea menor
+                                        } /**
+                                         * si la cantidad es mayor al stock le
+                                         * pedimos al usuario que meta una
+                                         * cantidad correcta y volvemos a
+                                         * comprobar que la cantidad sea menor
                                          */
                                         else {
                                             System.out.println("\nLa cantidad que desea del"
                                                     + " producto supera la cantidad "
                                                     + "disponible del producto");
-                                            System.out.println("\nCantidad disponible: " + (productos_disponibles.listaProductos.get(posicion_producto_deseado).stock_Producto - lista_del_carrito.carrito_de_Productos.get(posicion_prodcuto_en_carrito).cantidad_ProductoCarrito));
-                                            System.out.println("\nElija la cantidad del producto que desea");
-                                            int newcantidad = Integer.parseInt(datos_usuario.readLine());
+                                            System.out.println("\nCantidad disponible: "
+                                                    + (productos_disponibles.listaProductos.get(posicion_producto_deseado).stock_Producto
+                                                    - lista_del_carrito.carrito_de_Productos.get(posicion_prodcuto_en_carrito).cantidad_ProductoCarrito));
+                                            System.out.println("\nElija la cantidad del "
+                                                    + "producto que desea");
+                                            int newcantidad = Integer.parseInt(datos_usuario.
+                                                    readLine());
                                             cantidad = newcantidad;
                                         }
 
-                                        // el ciclo que nos ayudara a que se compruebe nuevamente que la cantidad es correcta
+                                        /**
+                                         * el ciclo que nos ayudara a que se
+                                         * compruebe nuevamente que la cantidad
+                                         * es correcta
+                                         */
                                     } while (cantidad_mas_producto > productos_disponibles.listaProductos.get(posicion_producto_deseado).stock_Producto);
                                 }
                             } else {
-                                System.out.println("Accion de agregar producto al carrito cancelada");
+                                System.out.println("Accion de agregar producto al carrito"
+                                        + " cancelada");
                             }
                         } else {
-                            System.out.println("\nEl producto que usted desea no se encuentra disponible");
+                            System.out.println("\nEl producto que usted desea no se encuentra"
+                                    + " disponible");
                         }
                         break;
                     case 2:
 
-                        // Consultamos nuestro carrito de compra
+                        /**
+                         * Consultamos nuestro carrito de compra
+                         */
                         System.out.println("\nConsultando el carrito");
                         lista_del_carrito.mostrarCarritoProductos();
                         break;
 
                     case 3:
 
-                        // eliminamos el producto con el id del indice que deseamos eliminar 
+                        /**
+                         * eliminamos el producto con el id del indice que
+                         * deseamos eliminar
+                         */
                         System.out.println("\nIngre el id del producto que desea eliminar");
                         int id_eliminar = Integer.parseInt(datos_usuario.readLine());
                         int posicion_en_carrito = lista_del_carrito.buscar_indice_carrito(id_eliminar);
 
-                        // comprobamos que el id del producto que vamos eliminar este en nuestro carrito
-                        if (posicion_en_carrito != 1) {
-                            lista_del_carrito.eliminarProductoCarrito(posicion_en_carrito, id_eliminar);
+                        /**
+                         * comprobamos que el id del producto que vamos eliminar
+                         * este en nuestro carrito
+                         */
+                        if (posicion_en_carrito != -1) {
+                            lista_del_carrito.eliminarProductoCarrito(posicion_en_carrito,
+                                    id_eliminar);
                         } else {
-                            System.out.println("\nEl id que proporciono no es correcto\nOperacion cancelada");
+                            System.out.println("\nEl id que proporciono no es correcto\n"
+                                    + "Operacion cancelada");
                         }
                         break;
 
-                    default:
+                    case 4:
 
+                        /**
+                         * Opcion para mandar los archivos al carrito
+                         */
+                        cliente = new Socket(direccion_ip, puerto);
+                        bandera = 2;
+                        solicitud = new PrintWriter(new OutputStreamWriter(
+                                cliente.getOutputStream()));
+                        solicitud.println(bandera);
+                        solicitud.flush();
+                        solicitud.close();
+                        cliente.close();
+
+                        /**
+                         * Serializamos el archivo que vamos a mandar al
+                         * servidor
+                         */
+                        System.out.println("\nSerializando nuestra lista de articulos para "
+                                + "el servidor");
+                        FileOutputStream fos = new FileOutputStream("C:\\Users\\Alan\\"
+                                + "Documents\\noveno_semestre\\Redes 2\\practica1\\"
+                                + "CarritoCompra\\src\\Productos_en_cliente\\"
+                                + "lista_productos_carrito.txt");
+                        ObjectOutputStream oos = new ObjectOutputStream(fos);
+                        oos.writeObject(lista_del_carrito);
+                        oos.close();
+                        fos.close();
+
+                        cliente = new Socket(direccion_ip, puerto);
+                        /**
+                         * Preparamos las variables con los datos que vamos a
+                         * necesitar para mandarlas al cliente
+                         */
+                        File archivo_al_cliente = new File("C:\\Users\\Alan\\"
+                                + "Documents\\noveno_semestre\\Redes 2\\practica1\\"
+                                + "CarritoCompra\\src\\Productos_en_cliente\\"
+                                + "lista_productos_carrito.txt");
+                        String ruta_archivo = archivo_al_cliente.getAbsolutePath();
+                        String nombre_archivo = archivo_al_cliente.getName();
+                        long tamaño_archivo = archivo_al_cliente.length();
+
+                        /**
+                         * Definimos dos flujos orientados a bytes, uno para
+                         * leer el archivo y otro para mandarlo por el socket
+                         */
+                        DataOutputStream dos_envio = new DataOutputStream(cliente.
+                                getOutputStream());
+                        DataInputStream dis_envio = new DataInputStream(new 
+                                FileInputStream(ruta_archivo));
+
+                        /**
+                         * Enviamos los datos generales del archivo por el
+                         * socket
+                         */
+                        dos_envio.writeUTF(nombre_archivo);
+                        dos_envio.flush();
+                        dos_envio.writeLong(tamaño_archivo);
+                        dos_envio.flush();
+
+                        /**
+                         * Leemos los datos contenidos en el archivo en paquetes
+                         * de 1024 bytes y lo enviamos por el socket
+                         */
+                        byte[] b_envio = new byte[1024];
+                        long enviados = 0;
+                        int n_envio;
+                        while (enviados < tamaño_archivo) {
+                            n_envio = dis_envio.read(b_envio);
+                            dos_envio.write(b_envio, 0, n_envio);
+                            dos_envio.flush();
+                            enviados = enviados + n_envio;
+                        }// cerramos el while
+
+                        /**
+                         * Cerramos los flujos, el socket, terminamos bloques y
+                         * cerramos flujos
+                         */
+                        System.out.print("\n\nArchivo enviado\n");
+                        dos_envio.close();
+                        dis_envio.close();
+                        cliente.close();
+                        break;
+
+                    default:
+                        seguir_comprando = 0;
+                        System.out.println("\nAdios");
                         // COMPRA DE PRODUCTOS DEL CARRITO
                         break;
                 }
