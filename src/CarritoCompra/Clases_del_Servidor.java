@@ -2,7 +2,6 @@ package CarritoCompra;
 
 import java.util.*;
 import java.io.*;
-import javax.crypto.spec.PSource;
 
 class ListaProducto implements Serializable {
 
@@ -41,7 +40,7 @@ class ListaProducto implements Serializable {
 
     public void mostrarProductoEspecifico(int posicion) {
         System.out.println("\n******************************************************************");
-        System.out.println("\nID del producto: " + listaProductos.get(posicion).nombre_Producto
+        System.out.println("\nID del producto: " + listaProductos.get(posicion).id_Producto
                 + "\nNombre producto: " + listaProductos.get(posicion).nombre_Producto
                 + "\nDescripcion del producto: " + listaProductos.get(posicion).descripcion_Producto
                 + "\nColores disponibles: " + Arrays.toString(listaProductos.get(posicion).colores_Producto)
@@ -54,7 +53,7 @@ class ListaProducto implements Serializable {
         System.out.println("\nBienvenido a nuestro sistema, este es nuestro menu");
         for (int i = 0; i < listaProductos.size(); i++) {
             System.out.println("\n******************************************************************");
-            System.out.println("\nID del producto: " + listaProductos.get(i).nombre_Producto
+            System.out.println("\nID del producto: " + listaProductos.get(i).id_Producto
                     + "\nNombre producto: " + listaProductos.get(i).nombre_Producto
                     + "\nDescripcion del producto: " + listaProductos.get(i).descripcion_Producto
                     + "\nColores disponibles: " + Arrays.toString(listaProductos.get(i).colores_Producto)

@@ -31,7 +31,7 @@ class CarritoCompra implements Serializable{
         carrito_de_Productos = new ArrayList<>();
     }
     public int buscar_indice_carrito(int id) {
-        int posicion = 0;
+        int posicion = -1;
         for (int i = 0; i < carrito_de_Productos.size(); i++) {
             if (id == carrito_de_Productos.get(i).id_ProductoCarrito) {
                 posicion = i;
@@ -52,14 +52,15 @@ class CarritoCompra implements Serializable{
     }
     public void mostrarCarritoProductos(){
         System.out.println("\nSu carrito de compra contiene los siguientes elementos");
+        System.out.println("\n***********************************************************************************************");
         for (int i = 0; i < carrito_de_Productos.size(); i++) {
-            System.out.println("\n********************************************************");
             System.out.println("\nID: " + carrito_de_Productos.get(i).id_ProductoCarrito 
             + " Nombre producto: " + carrito_de_Productos.get(i).nombre_Producto
             + " Cantidad del producto: " + carrito_de_Productos.get(i).cantidad_ProductoCarrito
             + " Precio: " + carrito_de_Productos.get(i).precio_Producto
             + " Cantidad a pagar: " + carrito_de_Productos.get(i).cantidad_pagar);
         }
+        System.out.println("\n***********************************************************************************************");
     }
 }
 
