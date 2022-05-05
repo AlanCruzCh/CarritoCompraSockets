@@ -131,9 +131,7 @@ public class CarritoServidor extends Clases_del_Servidor {
                     br_accion.close();
                     /**
                      * Hacemos nuestro menu
-                     */
-                    
-                    
+                     */                    
                     switch (mensaje_respuesta) {
 
                         case 1:
@@ -274,8 +272,122 @@ public class CarritoServidor extends Clases_del_Servidor {
                             fis.close();
                             dos.close();
                             dis.close();
+                            
+                            /**
+                             * Declaramos un ciclo para que la lista de productos disponibles se
+                             * actualize y posteriormente la regresamos al servidor
+                             */
+                            int id_producto_cliente;
+                            int posicion_producto_disponible;
+                            for (int i = 0; i < productos_del_cliente.carrito_de_Productos.
+                                    size(); i++) {
+                                id_producto_cliente = productos_del_cliente.carrito_de_Productos.
+                                        get(i).id_ProductoCarrito;
+                                posicion_producto_disponible = listProducto.
+                                        buscar_indice_producto(id_producto_cliente);
+                                listProducto.listaProductos.get(posicion_producto_disponible).
+                                        stock_Producto = listProducto.listaProductos.get
+                                        (posicion_producto_disponible).stock_Producto - 
+                                        productos_del_cliente.carrito_de_Productos.get(i).
+                                        cantidad_ProductoCarrito;
+                            }
 
-                            productos_del_cliente.mostrarCarritoProductos();
+                            for (int i = 0; i < listProducto.listaProductos.size(); i++) {
+
+                                //  Comprobamos si es que hay algun producto que no tenga stock
+                                if (listProducto.listaProductos.get(i).stock_Producto == 0) {
+                                    System.out.println("\nDesea agregar mas unidades al produto"
+                                    + listProducto.listaProductos.get(i).nombre_Producto+ "\nSi "
+                                    + "= 1 No = 0");
+                                    int pregunta = Integer.parseInt(br.readLine());
+                                    if (pregunta == 1) {
+                                        System.out.println("\nCuantos elementos desea agregar");
+                                        int cantidad = Integer.parseInt(br.readLine());
+                                        listProducto.agregar_Stock_Producto(i, cantidad);
+                                        System.out.println("El producto: " + listProducto.
+                                        listaProductos.get(i).nombre_Producto + " ahora "
+                                        + "tiene mas disponibilidad");
+                                    } else {
+                                        System.out.println("\n El producto: " + listProducto.
+                                            listaProductos.get(i).nombre_Producto + " ya no "
+                                            + "esta disponible");
+                                        listProducto.eliminar_Producto_sin_stock(i);
+                                    }
+                                }
+                            }// cierre del for 
+                            
+                            /**
+                             * Mandamos de nuevo nuestra lista de productos al cliente
+                             * actualizado
+                             */
+                            
+                            cliente = servidor.accept();
+                            
+                            System.out.println("\nSerializando nuestra lista de articulos"
+                                    + " actualizada para el cliente");
+                            fos = new FileOutputStream("C:\\Users\\Alan\\"
+                                    + "Documents\\noveno_semestre\\Redes 2\\practica1\\"
+                                    + "CarritoCompra\\src\\Productos_en_servidor\\"
+                                    + "lista_productos_disponibles.txt");
+                            oos = new ObjectOutputStream(fos);
+                            oos.writeObject(listProducto);
+                            oos.close();
+                            fos.close();
+                            
+                            /**
+                             * Preparamos las variables con los datos que vamos
+                             * a necesitar para mandarlas al cliente
+                             */
+                            archivo_al_cliente = new File("C:\\Users\\Alan\\Documents"
+                                    + "\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra\\src"
+                                    + "\\Productos_en_servidor\\"
+                                    + "lista_productos_disponibles.txt");
+                            ruta_archivo = archivo_al_cliente.getAbsolutePath();
+                            nombre_archivo = archivo_al_cliente.getName();
+                            tamaño_archivo = archivo_al_cliente.length();
+
+                            /**
+                             * Definimos dos flujos orientados a bytes, uno para
+                             * leer el archivo y otro para mandarlo por el
+                             * socket
+                             */
+                            dos_envio = new DataOutputStream(cliente.getOutputStream());
+                            dis_envio = new DataInputStream(new FileInputStream(ruta_archivo));
+
+                            /**
+                             * Enviamos los datos generales del archivo por el
+                             * socket
+                             */
+                            dos_envio.writeUTF(nombre_archivo);
+                            dos_envio.flush();
+                            dos_envio.writeLong(tamaño_archivo);
+                            dos_envio.flush();
+
+                            /**
+                             * Leemos los datos contenidos en el archivo en
+                             * paquetes de 1024 bytes y lo enviamos por el
+                             * socket
+                             */
+                            b_envio = new byte[1024];
+                            enviados = 0;
+                            n_envio = 0;
+                            while (enviados < tamaño_archivo) {
+                                n_envio = dis_envio.read(b_envio);
+                                dos_envio.write(b_envio, 0, n_envio);
+                                dos_envio.flush();
+                                enviados = enviados + n_envio;
+                            }// cerramos el while
+
+                            /**
+                             * Cerramos los flujos, el socket, terminamos
+                             * bloques y cerramos flujos
+                             */
+                            
+                            System.out.println("\n Mandamos el archivo " + nombre_archivo +
+                                    " actualizado al cliente");
+                            System.out.print("\n\nArchivo enviado\n");
+                            dos_envio.close();
+                            dis_envio.close();
                             break;
                             
                         default:

@@ -18,11 +18,6 @@ class Producto_del_Carrito implements Serializable{
         this.precio_Producto = precio;
         this.cantidad_pagar = pago;
     }
-    
-    public void mostrar_Producto_en_carrito(){
-        System.out.println("\nId: " + id_ProductoCarrito + "\nNombre: " + nombre_Producto + "\nColor: " + color_Producto
-        + "\nCantidad: " + cantidad_ProductoCarrito + " * Precio: " + precio_Producto + " = " + cantidad_pagar);
-    }
 }
 
 class CarritoCompra implements Serializable{
@@ -45,14 +40,15 @@ class CarritoCompra implements Serializable{
     }
     public void eliminarProductoCarrito(int posicion, int id){
         if(id == carrito_de_Productos.get(posicion).id_ProductoCarrito){
-            System.out.println("\nEl producto " + carrito_de_Productos.get(posicion).nombre_Producto + " se ha eliminado con "
-                    + "exito");
+            System.out.println("\nEl producto " + carrito_de_Productos.get(posicion).
+                    nombre_Producto + " se ha eliminado con " + "exito");
             carrito_de_Productos.remove(posicion);
         }
     }
     public void mostrarCarritoProductos(){
         System.out.println("\nSu carrito de compra contiene los siguientes elementos");
-        System.out.println("\n***********************************************************************************************");
+        System.out.println("\n*******************************************************"
+                + "*****************************************************************");
         for (int i = 0; i < carrito_de_Productos.size(); i++) {
             System.out.println("\nID: " + carrito_de_Productos.get(i).id_ProductoCarrito 
             + " Nombre producto: " + carrito_de_Productos.get(i).nombre_Producto
@@ -60,11 +56,10 @@ class CarritoCompra implements Serializable{
             + " Precio: " + carrito_de_Productos.get(i).precio_Producto
             + " Cantidad a pagar: " + carrito_de_Productos.get(i).cantidad_pagar);
         }
-        System.out.println("\n***********************************************************************************************");
+        System.out.println("\n*******************************************************"
+                + "*****************************************************************");
     }
 }
-
-
 
 public class Clases_del_Cliente {
     public static void main(String[] args) {
