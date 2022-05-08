@@ -22,8 +22,7 @@ class ListaProducto implements Serializable {
         return posicion;
     }
     public void eliminar_Producto_sin_stock(int posicion) {
-        System.out.println("\nEl producto con el id: " + listaProductos.get(posicion).id_Producto + " se eliminara de la lista"
-                + "de productos");
+        System.out.println("\nEl producto con el id: " + listaProductos.get(posicion).id_Producto               + " se eliminara de la lista" + "de productos");
         listaProductos.remove(posicion);
     }
     public void agregar_Stock_Producto(int posicion, int cantidad_agregar) {

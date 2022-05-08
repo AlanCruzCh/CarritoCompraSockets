@@ -111,7 +111,11 @@ public class CarritoCliente extends Clases_del_Cliente {
              * carrito de compra
              */
             CarritoCompra lista_del_carrito = new CarritoCompra();
-
+            
+            /**
+             * Definimos el formato de los numeros en float
+             */
+            
             /**
              * Hacemos un ciclo para que la accion de comprar se repita hasta
              * que el usuario tenga todos sus productos que desea

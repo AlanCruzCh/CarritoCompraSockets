@@ -3,7 +3,7 @@ package CarritoCompra;
 import java.util.*;
 import java.io.*;
 
-class Producto_del_Carrito implements Serializable{
+class Producto_del_Carrito implements Serializable {
     public int id_ProductoCarrito;
     public String nombre_Producto;
     public String color_Producto;
@@ -45,7 +45,7 @@ class CarritoCompra implements Serializable{
             carrito_de_Productos.remove(posicion);
         }
     }
-    public void mostrarCarritoProductos(){
+    public void mostrarCarritoProductos() {
         System.out.println("\nSu carrito de compra contiene los siguientes elementos");
         System.out.println("\n*******************************************************"
                 + "*****************************************************************");
