@@ -419,7 +419,6 @@ public class CarritoServidor extends Clases_del_Servidor {
                             DateFormat formatenadoHora = new SimpleDateFormat("hh.mm aa");
                             String horaFormateada = formatenadoHora.format(new Date());
 
-
                             PdfWriter pdfw = new PdfWriter(DIRECCION_PDF);
                             PdfDocument pdfd = new PdfDocument(pdfw);
                             Document doc = new Document(pdfd, PageSize.A5);
@@ -443,6 +442,7 @@ public class CarritoServidor extends Clases_del_Servidor {
                             String Cantidad = "Cantidad";
                             String Precio = "Precio";
                             String Pago = "Pago";
+                            float pagoTotal = 0;
                             StringTokenizer stkID = new StringTokenizer(ID);
                             StringTokenizer stkProoducto = new StringTokenizer(Producto);
                             StringTokenizer stkColor = new StringTokenizer(Color);
@@ -488,7 +488,16 @@ public class CarritoServidor extends Clases_del_Servidor {
                                         nextToken())));
                                 tabla.addCell(new Cell().add(new Paragraph(stkPago.
                                         nextToken())));
+                                pagoTotal = pagoTotal + productos_del_cliente.
+                                        carrito_de_Productos.get(i).cantidad_pagar;
                             }
+                            String tituloPago = "Total a pagar";
+                            StringTokenizer stktp = new StringTokenizer(tituloPago);
+                            tabla.addCell(new Cell(1,5).add(new Paragraph(stktp.nextToken())));
+                            String aPagarTotal =  String.valueOf(pagoTotal);
+                            StringTokenizer stkPagoTotal = new StringTokenizer(aPagarTotal);
+                            tabla.addCell(new Cell().add(new Paragraph(stkPagoTotal.
+                                    nextToken())));
                             
                             doc.add(tabla);
                             doc.close();

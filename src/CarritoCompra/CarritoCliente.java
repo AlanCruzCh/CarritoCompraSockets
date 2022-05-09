@@ -2,6 +2,8 @@ package CarritoCompra;
 
 import java.io.*;
 import java.net.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -113,10 +115,6 @@ public class CarritoCliente extends Clases_del_Cliente {
             CarritoCompra lista_del_carrito = new CarritoCompra();
             
             /**
-             * Definimos el formato de los numeros en float
-             */
-            
-            /**
              * Hacemos un ciclo para que la accion de comprar se repita hasta
              * que el usuario tenga todos sus productos que desea
              */
@@ -190,15 +188,18 @@ public class CarritoCliente extends Clases_del_Cliente {
                                              * Creamos nuestro constructor del
                                              * carrito de compra
                                              */
+                                            float pagoProducto = cantidad * 
+                                            productos_disponibles.listaProductos.get
+                                            (posicion_producto_deseado).precio_Producto;
+                                            pagoProducto = (float) (Math.round(pagoProducto *
+                                            100) / 100d);
                                             Producto_del_Carrito nuevoProducto = new 
                                             Producto_del_Carrito(id_producto,
                                             productos_disponibles.listaProductos.get
                                             (posicion_producto_deseado).nombre_Producto,
                                             color, cantidad, productos_disponibles.
                                             listaProductos.get(posicion_producto_deseado).
-                                            precio_Producto, (cantidad * productos_disponibles.
-                                            listaProductos.get(posicion_producto_deseado).
-                                            precio_Producto));
+                                            precio_Producto, pagoProducto);
                                             
                                             /**
                                              * Agregamos el producto al carrito
@@ -253,15 +254,18 @@ public class CarritoCliente extends Clases_del_Cliente {
                                              * Creamos nuestro constructor del
                                              * carrito de compra
                                              */
+                                            float pagoProducto = cantidad * 
+                                            productos_disponibles.listaProductos.get
+                                            (posicion_producto_deseado).precio_Producto;
+                                            pagoProducto = (float) (Math.round(pagoProducto *
+                                            100) / 100d);
                                             Producto_del_Carrito nuevoProducto = new 
-                                                Producto_del_Carrito(id_producto,
-                                                productos_disponibles.listaProductos.get
-                                                (posicion_producto_deseado).nombre_Producto,
-                                                color, cantidad, productos_disponibles.
-                                                listaProductos.get(posicion_producto_deseado).
-                                                precio_Producto, (cantidad * 
-                                                productos_disponibles.listaProductos.get
-                                                (posicion_producto_deseado).precio_Producto));
+                                            Producto_del_Carrito(id_producto,
+                                            productos_disponibles.listaProductos.get
+                                            (posicion_producto_deseado).nombre_Producto,
+                                            color, cantidad, productos_disponibles.
+                                            listaProductos.get(posicion_producto_deseado).
+                                            precio_Producto, pagoProducto);
 
                                             /**
                                              * Agregamos el producto al carrito
