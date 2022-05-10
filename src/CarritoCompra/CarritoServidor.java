@@ -419,6 +419,9 @@ public class CarritoServidor extends Clases_del_Servidor {
                             DateFormat formatenadoHora = new SimpleDateFormat("hh.mm aa");
                             String horaFormateada = formatenadoHora.format(new Date());
 
+                            /**
+                             * Crear el pdf
+                             */
                             PdfWriter pdfw = new PdfWriter(DIRECCION_PDF);
                             PdfDocument pdfd = new PdfDocument(pdfw);
                             Document doc = new Document(pdfd, PageSize.A5);
@@ -432,6 +435,7 @@ public class CarritoServidor extends Clases_del_Servidor {
                             doc.add(parrafo);
                             doc.add(parrafo2);
                             doc.add(parrafoFecha);
+                            
                             float[] pointColumnWidths = {50f, 200f, 120f, 100f, 100f, 100f};
                             Table tabla = new Table(pointColumnWidths);
                             tabla.setTextAlignment(TextAlignment.CENTER);
