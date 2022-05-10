@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.Socket;
+import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -117,12 +117,12 @@ public class InterfazBienvenida extends JFrame{
             }
             else{
                 PuertoServidor = Integer.parseInt(puerto);
-                try {
+                //try {
                     /**
                      * Mandamos una peticion al servidor para que este nos mande la lista de 
                      * productos disponibles que le mandaremos a la interfaz del menu
                      */
-                    Socket cliente = new Socket(direccion_IP, PuertoServidor);
+                /*    Socket cliente = new Socket(direccion_IP, PuertoServidor);
                     int bandera = 1;
                     PrintWriter solicitud = new PrintWriter(new OutputStreamWriter(
                             cliente.getOutputStream()));
@@ -130,36 +130,36 @@ public class InterfazBienvenida extends JFrame{
                     solicitud.flush();
                     solicitud.close();
                     cliente.close();
-                    
+                */    
                     /**
                      * Descargamos el archivo que trae la lista de productos que mandaremos a
                      * la interfaz menu
                      */
-                    cliente = new Socket(direccion_IP, PuertoServidor);
+                /*    cliente = new Socket(direccion_IP, PuertoServidor);
                     DataInputStream dis = new DataInputStream(cliente.getInputStream());
-
+                */
                     /**
                      * Leemos los datos principales del archivo y creamos un flujo para
                      * escribir el archivo de salida
                      */
-                    byte[] b = new byte[1024];
+                /*    byte[] b = new byte[1024];
                     String nombre = dis.readUTF();
                     long tam = dis.readLong();
                     DataOutputStream dos = new DataOutputStream(new FileOutputStream(
                             ruta_descarga + nombre));
-
+*/
                     /**
                      * Preparamos los datos para recibir los paquetes de datos del
                      * archivo
                      */
-                    long recibidos = 0;
-                    int n;
+  //                  long recibidos = 0;
+    //                int n;
 
                     /**
                      * Definimos el ciclo donde estaremos recibiendo los datos mandados
                      * por el cliente
                      */
-                    while (recibidos < tam) {
+      /*              while (recibidos < tam) {
                         n = dis.read(b);
                         dos.write(b, 0, n);
                         dos.flush();
@@ -186,7 +186,7 @@ public class InterfazBienvenida extends JFrame{
                     Logger.getLogger(InterfazBienvenida.class.getName()).log(Level.SEVERE, null,
                             ex);
                 }
-                InterfazMenu ventanaMenu = new InterfazMenu(direccion_IP, PuertoServidor,
+*/              InterfazMenu ventanaMenu = new InterfazMenu(direccion_IP, PuertoServidor,
                         productos_disponibles);
                 ventana.dispose();
             }
