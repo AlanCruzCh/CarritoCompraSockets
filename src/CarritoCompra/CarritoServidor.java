@@ -53,28 +53,34 @@ public class CarritoServidor extends Clases_del_Servidor {
          */
         String[] colores_goober_candy = new String[]{"Azul", "Amarillo"};
         Producto goobers_candy = new Producto(1, "Goober Candy", colores_goober_candy,
-                "ImagenesProductos/Goober candy.png", "Cacahuate tostado cubierto de chocolate "
-                + "oscuro", 19.50f, 50);
+                "C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra"
+                + "\\src\\ImagenesProductos\\Goober candy.png", 
+                "Cacahuate tostado cubierto de chocolate oscuro", 19.50f, 50);
 
         String[] colores_Betty_Crocker_cake = new String[]{"Rojo", "Dorado"};
         Producto betty_crocker_cake = new Producto(2, "Betty Crocker cake mix devil's food",
-                colores_Betty_Crocker_cake, "ImagenesProductos/devils-food-cake.png", "Mezcla "
-                + "instantánea para pastel sabor chocolate", 35.90f, 10);
+                colores_Betty_Crocker_cake, "C:\\Users\\Alan\\Documents\\noveno_semestre\\"
+                + "Redes 2\\practica1\\CarritoCompra\\src\\ImagenesProductos\\"
+                + "devils-food-cake.png", "Mezcla instantánea para pastel sabor chocolate", 
+                35.90f, 10);
 
         String[] colores_caprince_naturals = new String[]{"Rojo"};
         Producto caprince_naturals = new Producto(3, "Caprince Naturals",
-                colores_caprince_naturals, "ImagenesProductos/CapriceNaturals.png",
-                "Shampoo con extracto de manzana", 33.20f, 15);
+                colores_caprince_naturals, "C:\\Users\\Alan\\Documents\\noveno_semestre\\"
+                + "Redes 2\\practica1\\CarritoCompra\\src\\ImagenesProductos\\"
+                + "CapriceNaturals.png", "Shampoo con extracto de manzana", 33.20f, 15);
 
         String[] colores_Naturalmilk = new String[]{"Blanco", "Azul"};
         Producto Naturalmilk = new Producto(4, "Naturalmilk", colores_Naturalmilk,
-                "ImagenesProductos/Naturalmilk.png", "Crema corporal antioxidante con extracto "
-                + "de argan y frutos rojos", 19.90f, 30);
+                "C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra"
+                + "\\src\\ImagenesProductos\\Naturalmilk.png", 
+                "Crema corporal antioxidante con extracto de argan y frutos rojos", 19.90f, 30);
 
         String[] colores_Pinguinos_fresa = new String[]{"Rojo", "Rosa"};
         Producto Pinguinos_fresa = new Producto(5, "Pinguinos fresa", colores_Pinguinos_fresa,
-                "ImagenesProductos/Pinguinos_fresa.jpg", "Panque de chocolate con relleno "
-                + "cremoso sabor fresa y ganache de chocolate", 15.0f, 30);
+                "C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra"
+                + "\\src\\ImagenesProductos\\Pinguinos_fresa.jpg", 
+                "Panque de chocolate con relleno cremoso sabor fresa", 15.0f, 30);
 
         /**
          * Agregamos los productos a la lista de productos creada con

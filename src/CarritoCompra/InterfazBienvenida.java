@@ -15,6 +15,7 @@ public class InterfazBienvenida extends JFrame{
     private static  String puerto;
     private static int PuertoServidor;
     private static ListaProducto productos_disponibles;
+    private static boolean activarBotones;
     
     public static void main(String[] args) {
         
@@ -117,12 +118,12 @@ public class InterfazBienvenida extends JFrame{
             }
             else{
                 PuertoServidor = Integer.parseInt(puerto);
-                //try {
+                try {
                     /**
                      * Mandamos una peticion al servidor para que este nos mande la lista de 
                      * productos disponibles que le mandaremos a la interfaz del menu
                      */
-                /*    Socket cliente = new Socket(direccion_IP, PuertoServidor);
+                    Socket cliente = new Socket(direccion_IP, PuertoServidor);
                     int bandera = 1;
                     PrintWriter solicitud = new PrintWriter(new OutputStreamWriter(
                             cliente.getOutputStream()));
@@ -130,36 +131,36 @@ public class InterfazBienvenida extends JFrame{
                     solicitud.flush();
                     solicitud.close();
                     cliente.close();
-                */    
+                    
                     /**
                      * Descargamos el archivo que trae la lista de productos que mandaremos a
                      * la interfaz menu
                      */
-                /*    cliente = new Socket(direccion_IP, PuertoServidor);
+                    cliente = new Socket(direccion_IP, PuertoServidor);
                     DataInputStream dis = new DataInputStream(cliente.getInputStream());
-                */
+                
                     /**
                      * Leemos los datos principales del archivo y creamos un flujo para
                      * escribir el archivo de salida
                      */
-                /*    byte[] b = new byte[1024];
+                    byte[] b = new byte[1024];
                     String nombre = dis.readUTF();
                     long tam = dis.readLong();
                     DataOutputStream dos = new DataOutputStream(new FileOutputStream(
                             ruta_descarga + nombre));
-*/
+                    
                     /**
                      * Preparamos los datos para recibir los paquetes de datos del
                      * archivo
                      */
-  //                  long recibidos = 0;
-    //                int n;
+                    long recibidos = 0;
+                    int n;
 
                     /**
                      * Definimos el ciclo donde estaremos recibiendo los datos mandados
                      * por el cliente
                      */
-      /*              while (recibidos < tam) {
+                    while (recibidos < tam) {
                         n = dis.read(b);
                         dos.write(b, 0, n);
                         dos.flush();
@@ -176,19 +177,23 @@ public class InterfazBienvenida extends JFrame{
                     dos.close();
                     dis.close();
                     cliente.close();
-                    
+                    activarBotones = true;
+                    InterfazMenu ventanaMenu = new InterfazMenu(direccion_IP, PuertoServidor,
+                            productos_disponibles, activarBotones);
+                    ventana.dispose();
                 } catch (IOException ex) {
                     Logger.getLogger(InterfazBienvenida.class.getName()).log(Level.SEVERE, null,
                             ex);
                     JOptionPane.showMessageDialog(null, "No se pudo conectar con el servidor",
                             "Fallo de conexion", JOptionPane.ERROR_MESSAGE);
+                    activarBotones = false;
+                    InterfazMenu ventanaMenu = new InterfazMenu(direccion_IP, PuertoServidor,
+                            productos_disponibles, activarBotones);
+                    ventana.dispose();
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(InterfazBienvenida.class.getName()).log(Level.SEVERE, null,
                             ex);
                 }
-*/              InterfazMenu ventanaMenu = new InterfazMenu(direccion_IP, PuertoServidor,
-                        productos_disponibles);
-                ventana.dispose();
             }
         };
         

@@ -1,23 +1,40 @@
 package CarritoCompra;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 import javax.swing.*;
 
 public class InterfazMenu {
     
     JFrame ventanaMenu;
     JPanel plantillaMenu;
+    int iteradorLista;
+    ImageIcon producto;
+    ListaProducto productosaMostrar;
+    JLabel imagenProducto, numeroProducto, nombreProducto, coloresProducto, precioProducto,
+            cantidadProducto, descipcionProducto;
     /**
      * El cosntructor que nos generara la siguiente ventana, en este caso es la ventana menu
      * @param Direcccion_IP
      * @param PuertoServidor
      * @param productosDisponibles
+     * @param activarBotones
      */
     public InterfazMenu (String Direcccion_IP, int PuertoServidor, ListaProducto
-            productosDisponibles){
+            productosDisponibles, boolean activarBotones){
+        this.productosaMostrar = productosDisponibles;
+        
         crearVentana();
         agregarPanel();
-        agregarEtiquetasDefauls();
+        if(activarBotones == true){
+            agregarEtiquetasConInfo(activarBotones);
+        }else{
+            //agregarEtiquetasDefauls(activarBotones);
+        }
+        
+        
     }
     
     /**
@@ -25,7 +42,7 @@ public class InterfazMenu {
      */
     private void crearVentana(){
         ventanaMenu = new JFrame("Ventana Menu");
-        ventanaMenu.setSize(1000, 700);
+        ventanaMenu.setSize(930, 420);
         ventanaMenu.setLocationRelativeTo(null);
         Image mercado = Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alan\\Documents"
                 + "\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra\\src\\"
@@ -33,7 +50,6 @@ public class InterfazMenu {
         ventanaMenu.setIconImage(mercado);
         ventanaMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventanaMenu.setVisible(true);
-        
     }
     
     /**
@@ -42,23 +58,23 @@ public class InterfazMenu {
      */
     private void agregarPanel(){
         plantillaMenu = new JPanel();
-        plantillaMenu.setBackground(Color.DARK_GRAY);
+        plantillaMenu.setBackground(Color.decode("#800018"));
         plantillaMenu.setLayout(null);
         ventanaMenu.add(plantillaMenu);
     }
     
     /**
-     * metodo que nos ayudara a agregarle los componentes a nuestra plantilla asi como los eventos
-     * de los botonoes 
+     * metodo que nos ayudara a agregarle los componentes a nuestra plantilla asi como los
+     * eventos de los botonoes 
      */
-    private void agregarEtiquetasDefauls(){
+    /*private void agregarEtiquetasDefauls(boolean activarBotones){
         ImageIcon producto = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
                 + "\\practica1\\CarritoCompra\\src\\imagenesInterfaces\\notfound.png");
-        JLabel imagenProducto = new JLabel(new ImageIcon(producto.getImage().getScaledInstance
+        imagenProducto = new JLabel(new ImageIcon(producto.getImage().getScaledInstance
         (200,200, Image.SCALE_SMOOTH)));
         imagenProducto.setBounds(20, 20, 200, 200);
         
-        JLabel numeroProducto = new JLabel("Numero ID: NO ");
+        numeroProducto = new JLabel("Numero ID: NO ");
         numeroProducto.setForeground(Color.WHITE);
         numeroProducto.setHorizontalAlignment(JLabel.CENTER);
         numeroProducto.setBackground(Color.BLACK);
@@ -66,7 +82,7 @@ public class InterfazMenu {
         numeroProducto.setBounds(240, 40, 150, 40);
         numeroProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        JLabel nombreProducto = new JLabel("Nombre: no encontrado");
+        nombreProducto = new JLabel("Nombre: no encontrado");
         nombreProducto.setForeground(Color.WHITE);
         nombreProducto.setBackground(Color.BLACK);
         nombreProducto.setHorizontalAlignment(JLabel.CENTER);
@@ -74,7 +90,7 @@ public class InterfazMenu {
         nombreProducto.setBounds(400, 40, 300, 40);
         nombreProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        JLabel coloresProducto = new JLabel("Colores: NO ENCONTRADO");
+        coloresProducto = new JLabel("Colores: NO ENCONTRADO");
         coloresProducto.setForeground(Color.WHITE);
         coloresProducto.setBackground(Color.BLACK);
         coloresProducto.setOpaque(true);
@@ -82,7 +98,7 @@ public class InterfazMenu {
         coloresProducto.setBounds(240, 110, 460, 40);
         coloresProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        JLabel precioProducto = new JLabel("Precio: NO");
+        precioProducto = new JLabel("Precio: NO");
         precioProducto.setForeground(Color.WHITE);
         precioProducto.setBackground(Color.BLACK);
         precioProducto.setHorizontalAlignment(JLabel.CENTER);
@@ -90,7 +106,7 @@ public class InterfazMenu {
         precioProducto.setBounds(270, 180, 150, 40);
         precioProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        JLabel cantidadProducto = new JLabel("Cantidad: NO");
+        cantidadProducto = new JLabel("Cantidad: NO");
         cantidadProducto.setForeground(Color.WHITE);
         cantidadProducto.setBackground(Color.BLACK);
         cantidadProducto.setHorizontalAlignment(JLabel.CENTER);
@@ -98,7 +114,7 @@ public class InterfazMenu {
         cantidadProducto.setBounds(450, 180, 150, 40);
         cantidadProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        JLabel descipcionProducto = new JLabel("Descripcion: NO ENCONTRADA");
+        descipcionProducto = new JLabel("Descripcion: NO ENCONTRADA");
         descipcionProducto.setForeground(Color.WHITE);
         descipcionProducto.setHorizontalAlignment(JLabel.CENTER);
         descipcionProducto.setBackground(Color.BLACK);
@@ -114,19 +130,189 @@ public class InterfazMenu {
         plantillaMenu.add(descipcionProducto);
         plantillaMenu.add(imagenProducto);
         
-        colocarBontones(numeroProducto, nombreProducto, coloresProducto, precioProducto);
+        colocarBontones(numeroProducto, nombreProducto, coloresProducto, precioProducto,
+                activarBotones);
+    }
+    */
+    private void agregarEtiquetasConInfo(boolean  activarBotones){
+        iteradorLista = 0;
+        
+        producto = new ImageIcon(productosaMostrar.listaProductos.get(iteradorLista).
+                ruta_Imagen_Producto);
+        imagenProducto = new JLabel(new ImageIcon(producto.getImage().getScaledInstance
+        (200,200, Image.SCALE_SMOOTH)));
+        imagenProducto.setBounds(20, 20, 200, 200);
+        
+        numeroProducto = new JLabel("ID: " + productosaMostrar.listaProductos.get
+                (iteradorLista).id_Producto);
+        numeroProducto.setForeground(Color.WHITE);
+        numeroProducto.setHorizontalAlignment(JLabel.CENTER);
+        numeroProducto.setBackground(Color.BLACK);
+        numeroProducto.setOpaque(true);
+        numeroProducto.setBounds(240, 40, 150, 40);
+        numeroProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
+        
+        nombreProducto = new JLabel("Nombre: " + productosaMostrar.listaProductos.get
+                (iteradorLista).nombre_Producto);
+        nombreProducto.setForeground(Color.WHITE);
+        nombreProducto.setBackground(Color.BLACK);
+        nombreProducto.setHorizontalAlignment(JLabel.CENTER);
+        nombreProducto.setOpaque(true);
+        nombreProducto.setBounds(400, 40, 300, 40);
+        nombreProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
+        
+        coloresProducto = new JLabel("Colores: " + Arrays.toString(productosaMostrar.
+                listaProductos.get(iteradorLista).colores_Producto));
+        coloresProducto.setForeground(Color.WHITE);
+        coloresProducto.setBackground(Color.BLACK);
+        coloresProducto.setOpaque(true);
+        coloresProducto.setHorizontalAlignment(JLabel.CENTER);
+        coloresProducto.setBounds(240, 110, 460, 40);
+        coloresProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
+        
+        precioProducto = new JLabel("Precio: " + productosaMostrar.listaProductos.get
+                (iteradorLista).precio_Producto);
+        precioProducto.setForeground(Color.WHITE);
+        precioProducto.setBackground(Color.BLACK);
+        precioProducto.setHorizontalAlignment(JLabel.CENTER);
+        precioProducto.setOpaque(true);
+        precioProducto.setBounds(270, 180, 150, 40);
+        precioProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
+        
+        cantidadProducto = new JLabel("Cantidad: " + productosaMostrar.listaProductos.get
+                (iteradorLista).stock_Producto);
+        cantidadProducto.setForeground(Color.WHITE);
+        cantidadProducto.setBackground(Color.BLACK);
+        cantidadProducto.setHorizontalAlignment(JLabel.CENTER);
+        cantidadProducto.setOpaque(true);
+        cantidadProducto.setBounds(450, 180, 150, 40);
+        cantidadProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
+        
+        descipcionProducto = new JLabel("Descripcion: " + productosaMostrar.
+                listaProductos.get(iteradorLista).descripcion_Producto);
+        descipcionProducto.setForeground(Color.WHITE);
+        descipcionProducto.setHorizontalAlignment(JLabel.CENTER);
+        descipcionProducto.setBackground(Color.BLACK);
+        descipcionProducto.setOpaque(true);
+        descipcionProducto.setBounds(20, 250, 680, 40);
+        descipcionProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
+        
+        plantillaMenu.add(numeroProducto);
+        plantillaMenu.add(nombreProducto);
+        plantillaMenu.add(coloresProducto);
+        plantillaMenu.add(precioProducto);
+        plantillaMenu.add(cantidadProducto);
+        plantillaMenu.add(descipcionProducto);
+        plantillaMenu.add(imagenProducto);
+        
+        colocarBontones(activarBotones);
     }
     
-    public void colocarBontones (JLabel numeroProducto, JLabel nombreProducto, JLabel
-            coloresProducto, JLabel precioProducto){
+    private void actualizarEtiquetas(){
         
-        JButton botonComprar = new JButton("Agregar al carrito");
-        botonComprar.setBounds(180, 320, 350, 50);
+        producto = new ImageIcon(productosaMostrar.listaProductos.get(iteradorLista).
+                ruta_Imagen_Producto);
+        imagenProducto.setIcon(new ImageIcon(producto.getImage().getScaledInstance(200,200,
+                Image.SCALE_SMOOTH)));
+        numeroProducto.setText("ID: " + productosaMostrar.listaProductos.get
+                (iteradorLista).id_Producto);
+        
+        nombreProducto.setText("Nombre: " + productosaMostrar.listaProductos.get
+                (iteradorLista).nombre_Producto);
+        
+        coloresProducto.setText("Colores: " + Arrays.toString(productosaMostrar.
+                listaProductos.get(iteradorLista).colores_Producto));
+        
+        precioProducto.setText("Precio: " + productosaMostrar.listaProductos.get
+                (iteradorLista).precio_Producto);
+        
+        cantidadProducto.setText("Cantidad: " + productosaMostrar.listaProductos.get
+                (iteradorLista).stock_Producto);
+        
+        descipcionProducto.setText("Descripcion: " + productosaMostrar.
+                listaProductos.get(iteradorLista).descripcion_Producto);
+        
+        
+    }
+    
+    
+    public void colocarBontones (boolean activarBotonesInterfaz){
+        
+        JButton botonAgregar = new JButton("Agregar al carrito");
+        botonAgregar.setBounds(180, 320, 350, 50);
+        botonAgregar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 20));
+        
+        ImageIcon atras = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
+                + "\\practica1\\CarritoCompra\\src\\imagenesInterfaces\\atras.png");
+        JButton botonAtras = new JButton(new ImageIcon(atras.getImage()
+                .getScaledInstance(50,50, Image.SCALE_SMOOTH)));
+        botonAtras.setBounds(80, 320, 80, 50);
+        
+        ImageIcon adelante = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
+                + "\\practica1\\CarritoCompra\\src\\imagenesInterfaces\\adelante.png");
+        JButton botonAdelante = new JButton(new ImageIcon(adelante.getImage()
+                .getScaledInstance(50,50, Image.SCALE_SMOOTH)));
+        botonAdelante.setBounds(550, 320, 80, 50);
+        
+        JButton botonComprar = new JButton("Comprar carrito");
+        botonComprar.setBounds(730, 50, 150, 40);
         botonComprar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 15));
-        botonComprar.setEnabled(false);
         
+        JButton  botonConsultar = new JButton("Consultar carrito");
+        botonConsultar.setBounds(730, 140, 150, 40);
+        botonConsultar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 15));
+        
+        JButton botonModificar = new JButton("Modificar carrito");
+        botonModificar.setBounds(730, 220, 150, 40);
+        botonModificar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 15));
+        
+        botonAdelante.setEnabled(activarBotonesInterfaz);
+        botonAgregar.setEnabled(activarBotonesInterfaz);
+        botonAtras.setEnabled(activarBotonesInterfaz);
+        botonComprar.setEnabled(activarBotonesInterfaz);
+        botonConsultar.setEnabled(activarBotonesInterfaz);
+        botonModificar.setEnabled(activarBotonesInterfaz);
+        
+        /**
+         * agregando eventos a los botones
+         */
+        
+        ActionListener avanzarAdelante;
+        avanzarAdelante = (ActionEvent e) -> {
+            iteradorLista = iteradorLista + 1;
+            if (iteradorLista < productosaMostrar.listaProductos.size()) {
+                actualizarEtiquetas();
+                botonAtras.setEnabled(activarBotonesInterfaz);
+            }
+            else{
+                botonAdelante.setEnabled(false);
+            }
+        };
+        
+        botonAdelante.addActionListener(avanzarAdelante);
+        
+        ActionListener avanzarAtras;
+        avanzarAtras = (ActionEvent e) -> {
+            iteradorLista = iteradorLista - 1;
+            if (iteradorLista >=  0) {
+                actualizarEtiquetas();
+                botonAdelante.setEnabled(activarBotonesInterfaz);
+            }
+            else{
+                iteradorLista = 0;
+                botonAtras.setEnabled(false);
+            }
+        };
+        
+        botonAtras.addActionListener(avanzarAtras);
+        
+        plantillaMenu.add(botonAtras);
+        plantillaMenu.add(botonAgregar);
+        plantillaMenu.add(botonAdelante);
         plantillaMenu.add(botonComprar);
-        
+        plantillaMenu.add(botonConsultar);
+        plantillaMenu.add(botonModificar);
+              
     }
     
 }
