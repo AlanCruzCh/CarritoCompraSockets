@@ -67,8 +67,8 @@ public class CarritoServidor extends Clases_del_Servidor {
         String[] colores_caprince_naturals = new String[]{"Rojo"};
         Producto caprince_naturals = new Producto(3, "Caprince Naturals",
                 colores_caprince_naturals, "C:\\Users\\Alan\\Documents\\noveno_semestre\\"
-                + "Redes 2\\practica1\\CarritoCompra\\src\\ImagenesProductos\\"
-                + "CapriceNaturals.png", "Shampoo con extracto de manzana", 33.20f, 15);
+                        + "Redes 2\\practica1\\CarritoCompra\\src\\ImagenesProductos\\"
+                        + "CaprinceNaturals.png", "Shampoo con extracto de manzana", 33.20f, 15);
 
         String[] colores_Naturalmilk = new String[]{"Blanco", "Azul"};
         Producto Naturalmilk = new Producto(4, "Naturalmilk", colores_Naturalmilk,

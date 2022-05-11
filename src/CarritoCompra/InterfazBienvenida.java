@@ -11,11 +11,12 @@ import javax.swing.*;
 
 public class InterfazBienvenida extends JFrame{
     
-    private static  String direccion_IP;
-    private static  String puerto;
-    private static int PuertoServidor;
-    private static ListaProducto productos_disponibles;
-    private static boolean activarBotones;
+    public static  String direccion_IP;
+    public static  String puerto;
+    public static int PuertoServidor;
+    public static ListaProducto productos_disponibles;
+    public static boolean activarBotones;
+    public static CarritoCompra productos_carrito = new CarritoCompra();
     
     public static void main(String[] args) {
         
@@ -80,7 +81,7 @@ public class InterfazBienvenida extends JFrame{
         //direccionIP.setBackground(Color.BLACK);
         direccionIP.setFont(new Font("Bell MT", Font.PLAIN, 25));
         
-        JTextField textoIP = new JTextField();
+        JTextField textoIP = new JTextField("192.168.100.14");
         textoIP.setBounds(175, 150, 200, 40);
         textoIP.setHorizontalAlignment(JTextField.CENTER);
         
@@ -92,7 +93,7 @@ public class InterfazBienvenida extends JFrame{
         //direccionIP.setBackground(Color.BLACK);
         numeroPuerto.setFont(new Font("Bell MT", Font.PLAIN, 25));
         
-        JTextField textoPuerto = new JTextField();
+        JTextField textoPuerto = new JTextField("3070");
         textoPuerto.setBounds(175, 260, 200, 40);
         textoPuerto.setHorizontalAlignment(JTextField.CENTER);
         
@@ -178,8 +179,11 @@ public class InterfazBienvenida extends JFrame{
                     dis.close();
                     cliente.close();
                     activarBotones = true;
-                    InterfazMenu ventanaMenu = new InterfazMenu(direccion_IP, PuertoServidor,
-                            productos_disponibles, activarBotones);
+                    JOptionPane.showMessageDialog(null, "Conexion con el servidor exitosa\n"
+                            + "Disfrute su estancia",
+                            "Conexion Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                    InterfazMenu ventanaMenu = new InterfazMenu(activarBotones);
+                    
                     ventana.dispose();
                 } catch (IOException ex) {
                     Logger.getLogger(InterfazBienvenida.class.getName()).log(Level.SEVERE, null,
@@ -187,8 +191,7 @@ public class InterfazBienvenida extends JFrame{
                     JOptionPane.showMessageDialog(null, "No se pudo conectar con el servidor",
                             "Fallo de conexion", JOptionPane.ERROR_MESSAGE);
                     activarBotones = false;
-                    InterfazMenu ventanaMenu = new InterfazMenu(direccion_IP, PuertoServidor,
-                            productos_disponibles, activarBotones);
+                    InterfazMenu ventanaMenu = new InterfazMenu(activarBotones);
                     ventana.dispose();
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(InterfazBienvenida.class.getName()).log(Level.SEVERE, null,

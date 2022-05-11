@@ -3,35 +3,35 @@ package CarritoCompra;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
+import java.util.*;
 import javax.swing.*;
 
-public class InterfazMenu {
+public class InterfazMenu extends JFrame{
     
     JFrame ventanaMenu;
     JPanel plantillaMenu;
     int iteradorLista;
-    ImageIcon producto;
+    ImageIcon producto, atras, adelante;
     ListaProducto productosaMostrar;
     JLabel imagenProducto, numeroProducto, nombreProducto, coloresProducto, precioProducto,
             cantidadProducto, descipcionProducto;
+    JButton botonAdelante, botonAgregar, botonAtras, botonComprar, botonConsultar,
+            botonModificar;
+        
+    
     /**
      * El cosntructor que nos generara la siguiente ventana, en este caso es la ventana menu
-     * @param Direcccion_IP
-     * @param PuertoServidor
-     * @param productosDisponibles
      * @param activarBotones
      */
-    public InterfazMenu (String Direcccion_IP, int PuertoServidor, ListaProducto
-            productosDisponibles, boolean activarBotones){
-        this.productosaMostrar = productosDisponibles;
-        
+    public InterfazMenu (boolean activarBotones){
+        //this.productosaMostrar = productosDisponibles;
+        this.productosaMostrar = InterfazBienvenida.productos_disponibles;
         crearVentana();
         agregarPanel();
         if(activarBotones == true){
             agregarEtiquetasConInfo(activarBotones);
         }else{
-            //agregarEtiquetasDefauls(activarBotones);
+            agregarEtiquetasDefauls(activarBotones);
         }
         
         
@@ -67,8 +67,8 @@ public class InterfazMenu {
      * metodo que nos ayudara a agregarle los componentes a nuestra plantilla asi como los
      * eventos de los botonoes 
      */
-    /*private void agregarEtiquetasDefauls(boolean activarBotones){
-        ImageIcon producto = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
+    private void agregarEtiquetasDefauls(boolean activarBotones){
+        producto = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
                 + "\\practica1\\CarritoCompra\\src\\imagenesInterfaces\\notfound.png");
         imagenProducto = new JLabel(new ImageIcon(producto.getImage().getScaledInstance
         (200,200, Image.SCALE_SMOOTH)));
@@ -130,10 +130,9 @@ public class InterfazMenu {
         plantillaMenu.add(descipcionProducto);
         plantillaMenu.add(imagenProducto);
         
-        colocarBontones(numeroProducto, nombreProducto, coloresProducto, precioProducto,
-                activarBotones);
+        colocarBontones(activarBotones);
     }
-    */
+    
     private void agregarEtiquetasConInfo(boolean  activarBotones){
         iteradorLista = 0;
         
@@ -235,34 +234,33 @@ public class InterfazMenu {
         
     }
     
-    
     public void colocarBontones (boolean activarBotonesInterfaz){
         
-        JButton botonAgregar = new JButton("Agregar al carrito");
+        botonAgregar = new JButton("Agregar al carrito");
         botonAgregar.setBounds(180, 320, 350, 50);
         botonAgregar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 20));
         
-        ImageIcon atras = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
+        atras = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
                 + "\\practica1\\CarritoCompra\\src\\imagenesInterfaces\\atras.png");
-        JButton botonAtras = new JButton(new ImageIcon(atras.getImage()
+        botonAtras = new JButton(new ImageIcon(atras.getImage()
                 .getScaledInstance(50,50, Image.SCALE_SMOOTH)));
         botonAtras.setBounds(80, 320, 80, 50);
         
-        ImageIcon adelante = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
+        adelante = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
                 + "\\practica1\\CarritoCompra\\src\\imagenesInterfaces\\adelante.png");
-        JButton botonAdelante = new JButton(new ImageIcon(adelante.getImage()
+        botonAdelante = new JButton(new ImageIcon(adelante.getImage()
                 .getScaledInstance(50,50, Image.SCALE_SMOOTH)));
         botonAdelante.setBounds(550, 320, 80, 50);
         
-        JButton botonComprar = new JButton("Comprar carrito");
+        botonComprar = new JButton("Comprar carrito");
         botonComprar.setBounds(730, 50, 150, 40);
         botonComprar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 15));
         
-        JButton  botonConsultar = new JButton("Consultar carrito");
+        botonConsultar = new JButton("Consultar carrito");
         botonConsultar.setBounds(730, 140, 150, 40);
         botonConsultar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 15));
         
-        JButton botonModificar = new JButton("Modificar carrito");
+        botonModificar = new JButton("Modificar carrito");
         botonModificar.setBounds(730, 220, 150, 40);
         botonModificar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 15));
         
@@ -280,11 +278,12 @@ public class InterfazMenu {
         ActionListener avanzarAdelante;
         avanzarAdelante = (ActionEvent e) -> {
             iteradorLista = iteradorLista + 1;
-            if (iteradorLista < productosaMostrar.listaProductos.size()) {
+            if (iteradorLista < (productosaMostrar.listaProductos.size() - 1)) {
                 actualizarEtiquetas();
                 botonAtras.setEnabled(activarBotonesInterfaz);
             }
             else{
+                actualizarEtiquetas();
                 botonAdelante.setEnabled(false);
             }
         };
@@ -294,17 +293,26 @@ public class InterfazMenu {
         ActionListener avanzarAtras;
         avanzarAtras = (ActionEvent e) -> {
             iteradorLista = iteradorLista - 1;
-            if (iteradorLista >=  0) {
+            if (iteradorLista >=  1) {
                 actualizarEtiquetas();
                 botonAdelante.setEnabled(activarBotonesInterfaz);
             }
             else{
-                iteradorLista = 0;
+                actualizarEtiquetas();
                 botonAtras.setEnabled(false);
             }
         };
         
         botonAtras.addActionListener(avanzarAtras);
+        
+        ActionListener avanzarAgregarCarrito;
+        avanzarAgregarCarrito = (ActionEvent e) -> {
+            InterfazAgregarAlCarrito ventanAgregarCarrito = new InterfazAgregarAlCarrito
+                (iteradorLista, activarBotonesInterfaz);
+            ventanaMenu.dispose();
+        };
+        
+        botonAgregar.addActionListener(avanzarAgregarCarrito);
         
         plantillaMenu.add(botonAtras);
         plantillaMenu.add(botonAgregar);
