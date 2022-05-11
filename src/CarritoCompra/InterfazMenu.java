@@ -314,6 +314,16 @@ public class InterfazMenu extends JFrame{
         
         botonAgregar.addActionListener(avanzarAgregarCarrito);
         
+        ActionListener ConsultarCarritoCompra;
+        ConsultarCarritoCompra = (ActionEvent e) -> {
+            InterfazConsultaCarrito consultaElCarrito = new InterfazConsultaCarrito
+                    (activarBotonesInterfaz);
+            ventanaMenu.dispose();
+        };
+        
+        botonConsultar.addActionListener(ConsultarCarritoCompra);
+        
+        
         plantillaMenu.add(botonAtras);
         plantillaMenu.add(botonAgregar);
         plantillaMenu.add(botonAdelante);

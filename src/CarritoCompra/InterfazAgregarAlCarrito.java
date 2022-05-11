@@ -159,44 +159,95 @@ public class InterfazAgregarAlCarrito extends JFrame{
         
         ActionListener calcularCosto;
         calcularCosto = (ActionEvent e) -> {
-            int confimarProducto = productosEnCarrito.buscar_indice_carrito(productosDisponible.
-                    listaProductos.get(iteradorLista).id_Producto);
-            if (confimarProducto == -1){
-                // Producto Nuevo
-                int cantidadDeseada = Integer.parseInt(cantidadProductoDeseado.getText());
-                if(cantidadDeseada <= productosDisponible.listaProductos.get
-                    (iteradorLista).stock_Producto){
-                    float cuenta = cantidadDeseada * productosDisponible.listaProductos.get
-                    (iteradorLista).precio_Producto;
-                    apagarProducto.setText("A pagar: " + cuenta);
-                }
-                else{
-                JOptionPane.showMessageDialog(null, "La cantidad de productos que desea\n"
-                        + "supera la cantidad del producto\n disponible", "Acaba de arrebasar "
-                        + "el stock disponible", JOptionPane.WARNING_MESSAGE);
-                }
-            }else{
-                //el producto ya exixiste
-                int cantidadSuma = productosEnCarrito.carrito_de_Productos.get(confimarProducto).
-                        cantidad_ProductoCarrito + (Integer.parseInt(cantidadProductoDeseado.
-                        getText()));
-                if(cantidadSuma <= productosDisponible.listaProductos.get
-                    (iteradorLista).stock_Producto){
-                    int cantidadDeseada = Integer.parseInt(cantidadProductoDeseado.getText());
-                    float cuenta = cantidadDeseada * productosDisponible.listaProductos.get
-                    (iteradorLista).precio_Producto;
-                    apagarProducto.setText("A pagar: " + cuenta);
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "La cantidad de productos que desea\n"
-                        + "supera la cantidad del producto\n disponible", "Acaba de arrebasar "
-                        + "el stock disponible", JOptionPane.WARNING_MESSAGE);
-                }
+            String confirmarVacio = cantidadProductoDeseado.getText();
+            
+            if (confirmarVacio.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No ha indicado la cantidad del producto\n"
+                        + "que desea", "No agrego una cantidad", 
+                        JOptionPane.ERROR_MESSAGE);    
             }
+            else{
+                int confimarProducto = productosEnCarrito.buscar_indice_carrito
+                        (productosDisponible.listaProductos.get(iteradorLista).id_Producto);
+                if (confimarProducto == -1){
+                    // Producto Nuevo
+                    int cantidadDeseada = Integer.parseInt(cantidadProductoDeseado.getText());
+                    if(cantidadDeseada <= productosDisponible.listaProductos.get
+                        (iteradorLista).stock_Producto){
+                        float cuenta = cantidadDeseada * productosDisponible.listaProductos.get
+                        (iteradorLista).precio_Producto;
+                        apagarProducto.setText("A pagar: " + cuenta);
+                    }
+                    else{
+                    JOptionPane.showMessageDialog(null, "La cantidad de productos que desea\n"
+                            + "supera la cantidad del producto\n disponible", "Acaba de "
+                            + "arrebasar el stock disponible", JOptionPane.ERROR_MESSAGE);
+                    }
+                }else{
+                    //el producto ya exixiste
+                    int cantidadSuma = productosEnCarrito.carrito_de_Productos.get
+                            (confimarProducto).cantidad_ProductoCarrito + (Integer.parseInt
+                            (cantidadProductoDeseado.getText()));
+                    if(cantidadSuma <= productosDisponible.listaProductos.get
+                        (iteradorLista).stock_Producto){
+                        int cantidadDeseada = Integer.parseInt(cantidadProductoDeseado.
+                                getText());
+                        float cuenta = cantidadDeseada * productosDisponible.listaProductos.get
+                        (iteradorLista).precio_Producto;
+                        apagarProducto.setText("A pagar: " + cuenta);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "La cantidad de productos que desea"
+                                + "\nsupera la cantidad del producto\n disponible", "Acaba de "
+                                + "arrebasar el stock disponible", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }   
         };
         
         botonCalcular.addActionListener(calcularCosto);
         
+        ActionListener RegresarAlMenu;
+        RegresarAlMenu = (ActionEvent e) -> {
+            InterfazMenu ventanaMenu = new InterfazMenu(activarBotones);
+            ventanaCarrito.dispose();
+        };
+        
+        botonRegresar.addActionListener(RegresarAlMenu);
+        
+        botonCalcular.addActionListener(calcularCosto);
+        
+        ActionListener agregarProductoAlCarrito;
+        agregarProductoAlCarrito = (ActionEvent e) -> {
+            String confirmarVacio = cantidadProductoDeseado.getText();
+            if (confirmarVacio.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No ha indicado la cantidad del producto\n"
+                        + "que desea", "No agrego una cantidad", 
+                        JOptionPane.ERROR_MESSAGE);    
+            }
+            else{
+                float cuentaApagar = (Integer.parseInt(confirmarVacio)) * productosDisponible.
+                        listaProductos.get(iteradorLista).precio_Producto;
+                        
+                productoSelecionado = new Producto_del_Carrito(productosDisponible.
+                        listaProductos.get(iteradorLista).id_Producto, productosDisponible.
+                        listaProductos.get(iteradorLista).nombre_Producto, 
+                        String.valueOf(colorProductoDeseado.getSelectedItem()), 
+                        Integer.parseInt(confirmarVacio), productosDisponible.listaProductos.get
+                        (iteradorLista).precio_Producto, cuentaApagar);
+                productosEnCarrito.agregarProductoCarrito(productoSelecionado);
+                
+                JOptionPane.showMessageDialog(null, "Producto añadido al carrito de forma"
+                        + " exitosa", "Operacion EXITOSA", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                
+                InterfazMenu ventanaMenu = new InterfazMenu(activarBotones);
+                ventanaCarrito.dispose();
+            }
+            
+        };
+        
+        botonConfirmar.addActionListener(agregarProductoAlCarrito);
         
         
         plantillaCarrito.add(botonConfirmar);
