@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Alan/Documents/noveno_semestre/Redes%202/practica1/CarritoCompra/src/CarritoCompra/InterfazMenu.java</file>
-            <file>file:/C:/Users/Alan/Documents/noveno_semestre/Redes%202/practica1/CarritoCompra/src/CarritoCompra/InterfazBienvenida.java</file>
+            <file>file:/C:/Users/Alan/Documents/noveno_semestre/Redes%202/practica1/CarritoCompra/src/CarritoCompraFinal/InterfazMenu.java</file>
+            <file>file:/C:/Users/Alan/Documents/noveno_semestre/Redes%202/practica1/CarritoCompra/src/CarritoCompraFinal/InterfazInicio.java</file>
+            <file>file:/C:/Users/Alan/Documents/noveno_semestre/Redes%202/practica1/CarritoCompra/src/CarritoCompraFinal/MetodosSockets.java</file>
+            <file>file:/C:/Users/Alan/Documents/noveno_semestre/Redes%202/practica1/CarritoCompra/src/CarritoCompraFinal/ServidorCarritoCompra.java</file>
         </group>
     </open-files>
 </project-private>

@@ -17,6 +17,7 @@ public class InterfazBienvenida extends JFrame{
     public static ListaProducto productos_disponibles;
     public static boolean activarBotones;
     public static CarritoCompra productos_carrito = new CarritoCompra();
+    public static Socket cliente;
     
     public static void main(String[] args) {
         
@@ -123,8 +124,8 @@ public class InterfazBienvenida extends JFrame{
                     /**
                      * Mandamos una peticion al servidor para que este nos mande la lista de 
                      * productos disponibles que le mandaremos a la interfaz del menu
-                     */
-                    Socket cliente = new Socket(direccion_IP, PuertoServidor);
+                    
+                    cliente = new Socket(direccion_IP, PuertoServidor);
                     int bandera = 1;
                     PrintWriter solicitud = new PrintWriter(new OutputStreamWriter(
                             cliente.getOutputStream()));
@@ -132,6 +133,9 @@ public class InterfazBienvenida extends JFrame{
                     solicitud.flush();
                     solicitud.close();
                     cliente.close();
+                    */
+                    
+                    MetodosSocket.llamarIndicacioServidor(direccion_IP, PuertoServidor);
                     
                     /**
                      * Descargamos el archivo que trae la lista de productos que mandaremos a

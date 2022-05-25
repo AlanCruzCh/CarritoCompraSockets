@@ -1,45 +1,41 @@
-package CarritoCompra;
+package CarritoCompraFinal;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
-public class InterfazMenu extends JFrame{
+public class InterfazMenu {
     
-    JFrame ventanaMenu;
-    JPanel plantillaMenu;
-    int iteradorLista;
-    ImageIcon producto, atras, adelante;
-    ListaProducto productosaMostrar;
-    JLabel imagenProducto, numeroProducto, nombreProducto, coloresProducto, precioProducto,
-            cantidadProducto, descipcionProducto;
-    JButton botonAdelante, botonAgregar, botonAtras, botonComprar, botonConsultar,
-            botonModificar;
-        
+    public static ListaArticulos ProductosDisponibles;
+    private static int iteradorProductos;
+    private static JFrame ventanaMenu;
+    private static JPanel plantillaMenu;
+    private static ImageIcon producto, atras, adelante;
+    private static JLabel imagenProducto, numeroProducto, nombreProducto, coloresProducto,
+            precioProducto,cantidadProducto, descipcionProducto;
+    private static JButton botonAdelante, botonAgregar, botonAtras, botonComprar, botonConsultar;
+    boolean ActivadorDeEntradasSalidas;
     
-    /**
-     * El cosntructor que nos generara la siguiente ventana, en este caso es la ventana menu
-     * @param activarBotones
-     */
-    public InterfazMenu (boolean activarBotones){
-        //this.productosaMostrar = productosDisponibles;
-        this.productosaMostrar = InterfazBienvenida.productos_disponibles;
+    
+    public InterfazMenu(boolean Activador) {
+        this.ActivadorDeEntradasSalidas = Activador;
+        ProductosDisponibles = InterfazInicio.productosAMostrar; 
         crearVentana();
         agregarPanel();
-        if(activarBotones == true){
-            agregarEtiquetasConInfo(activarBotones);
+        
+        if (ActivadorDeEntradasSalidas == true) {
+            agregarEtiquetasConInfo();
         }else{
-            agregarEtiquetasDefauls(activarBotones);
+            agregarEtiquetasDefauls();
         }
-        
-        
+        colocarBontones();
+        activarBotones(ActivadorDeEntradasSalidas);
+        eventoBotones(ActivadorDeEntradasSalidas);
+        colocarEntradasSalidas();
+        ConfigurarVentana();
     }
     
-    /**
-     * metodo para crear la ventana que saremos de esta interfaz
-     */
     private void crearVentana(){
         ventanaMenu = new JFrame("Ventana Menu");
         ventanaMenu.setSize(930, 420);
@@ -48,26 +44,36 @@ public class InterfazMenu extends JFrame{
                 + "\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra\\src\\"
                 + "imagenesInterfaces\\icono.png");
         ventanaMenu.setIconImage(mercado);
-        ventanaMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void ConfigurarVentana(){
+        ventanaMenu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         ventanaMenu.setVisible(true);
+        ventanaMenu.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e){
+                int opcion = JOptionPane.showConfirmDialog(ventanaMenu, "¿Seguro que desea "
+                        + "salir del sisteme?", "Confirmacion de cierre", JOptionPane.
+                        YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if(opcion == JOptionPane.YES_OPTION){
+                    
+                    MetodosSockets.mandarIndicacioServidor(InterfazInicio.DireccionIP,
+                            InterfazInicio.PuertoServidor, -1);
+                    System.exit(0);
+                }
+            }
+        });
     }
     
-    /**
-     * metodo que le agrega una JPanel a nuestra ventana para poder agregar los elementos que 
-     * necesitamos sobre ella 
-     */
     private void agregarPanel(){
         plantillaMenu = new JPanel();
         plantillaMenu.setBackground(Color.decode("#800018"));
         plantillaMenu.setLayout(null);
         ventanaMenu.add(plantillaMenu);
+        
     }
     
-    /**
-     * metodo que nos ayudara a agregarle los componentes a nuestra plantilla asi como los
-     * eventos de los botonoes 
-     */
-    private void agregarEtiquetasDefauls(boolean activarBotones){
+    private void agregarEtiquetasDefauls(){
         producto = new ImageIcon("C:\\Users\\Alan\\Documents\\noveno_semestre\\Redes 2"
                 + "\\practica1\\CarritoCompra\\src\\imagenesInterfaces\\notfound.png");
         imagenProducto = new JLabel(new ImageIcon(producto.getImage().getScaledInstance
@@ -122,28 +128,19 @@ public class InterfazMenu extends JFrame{
         descipcionProducto.setBounds(20, 250, 680, 40);
         descipcionProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        plantillaMenu.add(numeroProducto);
-        plantillaMenu.add(nombreProducto);
-        plantillaMenu.add(coloresProducto);
-        plantillaMenu.add(precioProducto);
-        plantillaMenu.add(cantidadProducto);
-        plantillaMenu.add(descipcionProducto);
-        plantillaMenu.add(imagenProducto);
-        
-        colocarBontones(activarBotones);
     }
     
-    private void agregarEtiquetasConInfo(boolean  activarBotones){
-        iteradorLista = 0;
+    private void agregarEtiquetasConInfo(){
+        iteradorProductos = 0;
         
-        producto = new ImageIcon(productosaMostrar.listaProductos.get(iteradorLista).
+        producto = new ImageIcon(ProductosDisponibles.ListaDeProductos.get(iteradorProductos).
                 ruta_Imagen_Producto);
         imagenProducto = new JLabel(new ImageIcon(producto.getImage().getScaledInstance
         (200,200, Image.SCALE_SMOOTH)));
         imagenProducto.setBounds(20, 20, 200, 200);
         
-        numeroProducto = new JLabel("ID: " + productosaMostrar.listaProductos.get
-                (iteradorLista).id_Producto);
+        numeroProducto = new JLabel("ID: " + ProductosDisponibles.ListaDeProductos.
+                get(iteradorProductos).id_Producto);
         numeroProducto.setForeground(Color.WHITE);
         numeroProducto.setHorizontalAlignment(JLabel.CENTER);
         numeroProducto.setBackground(Color.BLACK);
@@ -151,8 +148,8 @@ public class InterfazMenu extends JFrame{
         numeroProducto.setBounds(240, 40, 150, 40);
         numeroProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        nombreProducto = new JLabel("Nombre: " + productosaMostrar.listaProductos.get
-                (iteradorLista).nombre_Producto);
+        nombreProducto = new JLabel("Nombre: " + ProductosDisponibles.ListaDeProductos.
+                get(iteradorProductos).nombre_Producto);
         nombreProducto.setForeground(Color.WHITE);
         nombreProducto.setBackground(Color.BLACK);
         nombreProducto.setHorizontalAlignment(JLabel.CENTER);
@@ -160,8 +157,8 @@ public class InterfazMenu extends JFrame{
         nombreProducto.setBounds(400, 40, 300, 40);
         nombreProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        coloresProducto = new JLabel("Colores: " + Arrays.toString(productosaMostrar.
-                listaProductos.get(iteradorLista).colores_Producto));
+        coloresProducto = new JLabel("Colores: " + Arrays.toString(ProductosDisponibles.
+                ListaDeProductos.get(iteradorProductos).colores_Producto));
         coloresProducto.setForeground(Color.WHITE);
         coloresProducto.setBackground(Color.BLACK);
         coloresProducto.setOpaque(true);
@@ -169,8 +166,8 @@ public class InterfazMenu extends JFrame{
         coloresProducto.setBounds(240, 110, 460, 40);
         coloresProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        precioProducto = new JLabel("Precio: " + productosaMostrar.listaProductos.get
-                (iteradorLista).precio_Producto);
+        precioProducto = new JLabel("Precio: " + ProductosDisponibles.ListaDeProductos.
+                get(iteradorProductos).precio_Producto);
         precioProducto.setForeground(Color.WHITE);
         precioProducto.setBackground(Color.BLACK);
         precioProducto.setHorizontalAlignment(JLabel.CENTER);
@@ -178,8 +175,8 @@ public class InterfazMenu extends JFrame{
         precioProducto.setBounds(270, 180, 150, 40);
         precioProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        cantidadProducto = new JLabel("Cantidad: " + productosaMostrar.listaProductos.get
-                (iteradorLista).stock_Producto);
+        cantidadProducto = new JLabel("Cantidad: " + ProductosDisponibles.ListaDeProductos.
+                get(iteradorProductos).stock_Producto);
         cantidadProducto.setForeground(Color.WHITE);
         cantidadProducto.setBackground(Color.BLACK);
         cantidadProducto.setHorizontalAlignment(JLabel.CENTER);
@@ -187,54 +184,18 @@ public class InterfazMenu extends JFrame{
         cantidadProducto.setBounds(450, 180, 150, 40);
         cantidadProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        descipcionProducto = new JLabel("Descripcion: " + productosaMostrar.
-                listaProductos.get(iteradorLista).descripcion_Producto);
+        descipcionProducto = new JLabel("Descripcion: " + ProductosDisponibles.ListaDeProductos.
+                get(iteradorProductos).descripcion_Producto);
         descipcionProducto.setForeground(Color.WHITE);
         descipcionProducto.setHorizontalAlignment(JLabel.CENTER);
         descipcionProducto.setBackground(Color.BLACK);
         descipcionProducto.setOpaque(true);
         descipcionProducto.setBounds(20, 250, 680, 40);
         descipcionProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
-        
-        plantillaMenu.add(numeroProducto);
-        plantillaMenu.add(nombreProducto);
-        plantillaMenu.add(coloresProducto);
-        plantillaMenu.add(precioProducto);
-        plantillaMenu.add(cantidadProducto);
-        plantillaMenu.add(descipcionProducto);
-        plantillaMenu.add(imagenProducto);
-        
-        colocarBontones(activarBotones);
+    
     }
     
-    private void actualizarEtiquetas(){
-        
-        producto = new ImageIcon(productosaMostrar.listaProductos.get(iteradorLista).
-                ruta_Imagen_Producto);
-        imagenProducto.setIcon(new ImageIcon(producto.getImage().getScaledInstance(200,200,
-                Image.SCALE_SMOOTH)));
-        numeroProducto.setText("ID: " + productosaMostrar.listaProductos.get
-                (iteradorLista).id_Producto);
-        
-        nombreProducto.setText("Nombre: " + productosaMostrar.listaProductos.get
-                (iteradorLista).nombre_Producto);
-        
-        coloresProducto.setText("Colores: " + Arrays.toString(productosaMostrar.
-                listaProductos.get(iteradorLista).colores_Producto));
-        
-        precioProducto.setText("Precio: " + productosaMostrar.listaProductos.get
-                (iteradorLista).precio_Producto);
-        
-        cantidadProducto.setText("Cantidad: " + productosaMostrar.listaProductos.get
-                (iteradorLista).stock_Producto);
-        
-        descipcionProducto.setText("Descripcion: " + productosaMostrar.
-                listaProductos.get(iteradorLista).descripcion_Producto);
-        
-        
-    }
-    
-    public void colocarBontones (boolean activarBotonesInterfaz){
+    private void colocarBontones (){
         
         botonAgregar = new JButton("Agregar al carrito");
         botonAgregar.setBounds(180, 320, 350, 50);
@@ -260,77 +221,130 @@ public class InterfazMenu extends JFrame{
         botonConsultar.setBounds(730, 140, 150, 40);
         botonConsultar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 15));
         
-        botonModificar = new JButton("Modificar carrito");
-        botonModificar.setBounds(730, 220, 150, 40);
-        botonModificar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 15));
+    }
+    
+    private void colocarEntradasSalidas(){
         
+        plantillaMenu.add(numeroProducto);
+        plantillaMenu.add(nombreProducto);
+        plantillaMenu.add(coloresProducto);
+        plantillaMenu.add(precioProducto);
+        plantillaMenu.add(cantidadProducto);
+        plantillaMenu.add(descipcionProducto);
+        plantillaMenu.add(imagenProducto);
+        plantillaMenu.add(botonAtras);
+        plantillaMenu.add(botonAgregar);
+        plantillaMenu.add(botonAdelante);
+        plantillaMenu.add(botonComprar);
+        plantillaMenu.add(botonConsultar); 
+        
+    }
+    
+    private void activarBotones(boolean activarBotonesInterfaz){
         botonAdelante.setEnabled(activarBotonesInterfaz);
         botonAgregar.setEnabled(activarBotonesInterfaz);
         botonAtras.setEnabled(activarBotonesInterfaz);
         botonComprar.setEnabled(activarBotonesInterfaz);
         botonConsultar.setEnabled(activarBotonesInterfaz);
-        botonModificar.setEnabled(activarBotonesInterfaz);
-        
-        /**
-         * agregando eventos a los botones
-         */
-        
+
+    }
+    
+    private void eventoBotones(boolean activarBotonesInterfaz){
         ActionListener avanzarAdelante;
         avanzarAdelante = (ActionEvent e) -> {
-            iteradorLista = iteradorLista + 1;
-            if (iteradorLista < (productosaMostrar.listaProductos.size() - 1)) {
+            iteradorProductos = iteradorProductos + 1;
+            System.out.println("" + iteradorProductos);
+            System.out.println("" + ProductosDisponibles.ListaDeProductos.size());
+            if (iteradorProductos < (ProductosDisponibles.ListaDeProductos.size() - 1)) {
                 actualizarEtiquetas();
                 botonAtras.setEnabled(activarBotonesInterfaz);
+                
             }
             else{
                 actualizarEtiquetas();
+                
                 botonAdelante.setEnabled(false);
             }
         };
-        
         botonAdelante.addActionListener(avanzarAdelante);
         
         ActionListener avanzarAtras;
         avanzarAtras = (ActionEvent e) -> {
-            iteradorLista = iteradorLista - 1;
-            if (iteradorLista >=  1) {
+            
+            System.out.println("" + ProductosDisponibles.ListaDeProductos.size());
+            iteradorProductos = iteradorProductos - 1;
+            if (iteradorProductos >=  1) {
                 actualizarEtiquetas();
                 botonAdelante.setEnabled(activarBotonesInterfaz);
+                
             }
             else{
                 actualizarEtiquetas();
                 botonAtras.setEnabled(false);
+                
             }
         };
-        
         botonAtras.addActionListener(avanzarAtras);
         
-        ActionListener avanzarAgregarCarrito;
-        avanzarAgregarCarrito = (ActionEvent e) -> {
-            InterfazAgregarAlCarrito ventanAgregarCarrito = new InterfazAgregarAlCarrito
-                (iteradorLista, activarBotonesInterfaz);
+        ActionListener AgregarCarrito;
+        AgregarCarrito = (ActionEvent e) -> {
+            InterfazAgregar ventanAgregarCarrito = new InterfazAgregar
+                (iteradorProductos, ActivadorDeEntradasSalidas);
             ventanaMenu.dispose();
         };
+        botonAgregar.addActionListener(AgregarCarrito);
         
-        botonAgregar.addActionListener(avanzarAgregarCarrito);
-        
-        ActionListener ConsultarCarritoCompra;
-        ConsultarCarritoCompra = (ActionEvent e) -> {
-            InterfazConsultaCarrito consultaElCarrito = new InterfazConsultaCarrito
-                    (activarBotonesInterfaz);
+        ActionListener ConsultarCarrito;
+        ConsultarCarrito = (ActionEvent e) -> {
+            InterfazConsulta ventanAgregarCarrito = new InterfazConsulta
+                (ActivadorDeEntradasSalidas);
             ventanaMenu.dispose();
         };
+        botonConsultar.addActionListener(ConsultarCarrito);
         
-        botonConsultar.addActionListener(ConsultarCarritoCompra);
+        ActionListener ComprarCarrito;
+        ComprarCarrito = (ActionEvent e) -> {
+            MetodosSockets.SerializarListaProductos("C:\\Users\\Alan\\Documents\\noveno_semestre"
+                    + "\\Redes 2\\practica1\\CarritoCompra\\src\\Productos_en_cliente\\"
+                    + "lista_productos_a_comprar.txt", InterfazInicio.productosAComprar);
+            
+            boolean validar = MetodosSockets.mandarIndicacioServidor(InterfazInicio.DireccionIP,
+                    InterfazInicio.PuertoServidor, 2);
+            if (validar == true){
+                MetodosSockets.SubirArchivo(InterfazInicio.DireccionIP, 
+                    InterfazInicio.PuertoServidor,
+                    "C:\\Users\\Alan\\Documents\\noveno_semestre"
+                    + "\\Redes 2\\practica1\\CarritoCompra\\src\\Productos_en_cliente\\"
+                    + "lista_productos_a_comprar.txt");
+            }
+            
+            
+        };
+        botonComprar.addActionListener(ComprarCarrito);
         
         
-        plantillaMenu.add(botonAtras);
-        plantillaMenu.add(botonAgregar);
-        plantillaMenu.add(botonAdelante);
-        plantillaMenu.add(botonComprar);
-        plantillaMenu.add(botonConsultar);
-        plantillaMenu.add(botonModificar);
-              
     }
     
+    private void actualizarEtiquetas(){
+        producto = new ImageIcon(ProductosDisponibles.ListaDeProductos.get(iteradorProductos).
+                ruta_Imagen_Producto);
+        imagenProducto.setIcon(new ImageIcon(producto.getImage().getScaledInstance(200,200,
+                Image.SCALE_SMOOTH)));
+        numeroProducto.setText("ID: " + ProductosDisponibles.ListaDeProductos.get
+                (iteradorProductos).id_Producto);
+        nombreProducto.setText("Nombre: " + ProductosDisponibles.ListaDeProductos.get
+                (iteradorProductos).nombre_Producto);
+        
+        coloresProducto.setText("Colores: " + Arrays.toString(ProductosDisponibles.
+                ListaDeProductos.get(iteradorProductos).colores_Producto));
+        
+        precioProducto.setText("Precio: " + ProductosDisponibles.ListaDeProductos.get
+                (iteradorProductos).precio_Producto);
+        
+        cantidadProducto.setText("Cantidad: " + ProductosDisponibles.ListaDeProductos.get
+                (iteradorProductos).stock_Producto);
+        
+        descipcionProducto.setText("Descripcion: " + ProductosDisponibles.ListaDeProductos.get
+                (iteradorProductos).descripcion_Producto);
+    }
 }

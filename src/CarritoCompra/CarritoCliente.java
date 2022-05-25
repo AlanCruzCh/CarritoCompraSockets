@@ -193,19 +193,10 @@ public class CarritoCliente extends Clases_del_Cliente {
                                             (posicion_producto_deseado).precio_Producto;
                                             pagoProducto = (float) (Math.round(pagoProducto *
                                             100) / 100d);
-                                            Producto_del_Carrito nuevoProducto = new 
-                                            Producto_del_Carrito(id_producto,
-                                            productos_disponibles.listaProductos.get
-                                            (posicion_producto_deseado).nombre_Producto,
-                                            color, cantidad, productos_disponibles.
-                                            listaProductos.get(posicion_producto_deseado).
-                                            precio_Producto, pagoProducto);
                                             
                                             /**
                                              * Agregamos el producto al carrito
                                              */
-                                            lista_del_carrito.agregarProductoCarrito
-                                                (nuevoProducto);
                                             System.out.println("\nNUEVO PRODUCTO AÑADIDO AL "
                                                     + "CARRITO");
                                         } /**
@@ -259,19 +250,10 @@ public class CarritoCliente extends Clases_del_Cliente {
                                             (posicion_producto_deseado).precio_Producto;
                                             pagoProducto = (float) (Math.round(pagoProducto *
                                             100) / 100d);
-                                            Producto_del_Carrito nuevoProducto = new 
-                                            Producto_del_Carrito(id_producto,
-                                            productos_disponibles.listaProductos.get
-                                            (posicion_producto_deseado).nombre_Producto,
-                                            color, cantidad, productos_disponibles.
-                                            listaProductos.get(posicion_producto_deseado).
-                                            precio_Producto, pagoProducto);
 
                                             /**
                                              * Agregamos el producto al carrito
                                              */
-                                            lista_del_carrito.agregarProductoCarrito
-                                                (nuevoProducto);
                                             System.out.println("\nNUEVO PRODUCTO AÑADIDO AL "
                                                     + "CARRITO");
                                         } 
@@ -322,7 +304,6 @@ public class CarritoCliente extends Clases_del_Cliente {
                          * Consultamos nuestro carrito de compra
                          */
                         System.out.println("\nConsultando el carrito");
-                        lista_del_carrito.mostrarCarritoProductos();
                         break;
 
                     case 3:

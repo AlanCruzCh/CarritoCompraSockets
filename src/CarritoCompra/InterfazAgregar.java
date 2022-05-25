@@ -1,42 +1,42 @@
-package CarritoCompra;
+package CarritoCompraFinal;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class InterfazAgregarAlCarrito extends JFrame{
+public class InterfazAgregar {
+    public static ListaArticulos articuloComprar, productoAAgregar;
+    private static JFrame ventanaCarrito;
+    private static JPanel plantillaCarrito;
+    private static JLabel idProducto, imagenProducto, nombreProducto, precioProducto, 
+            colorProducto, apagarProducto, cantidadProducto;
+    private static ImageIcon producto;
+    private static JTextField cantidadProductoDeseado;
+    private static JComboBox<String> colorProductoDeseado;
+    private static JButton botonConfirmar, botonRegresar, botonCalcular;
+    int indiceArticulo;
+    boolean ActivadorEntradasSalidas;
+    ProductoGeneral productoSelecionado;
     
-    CarritoCompra productosEnCarrito;
-    Producto_del_Carrito productoSelecionado;
-    ListaProducto productosDisponible;
-    JFrame ventanaCarrito;
-    JPanel plantillaCarrito;
-    JLabel idProducto, imagenProducto, nombreProducto, precioProducto, colorProducto,
-            apagarProducto, cantidadProducto;
-    ImageIcon producto;
-    int iteradorLista;
-    JTextField cantidadProductoDeseado;
-    JComboBox<String> colorProductoDeseado;
-    JButton botonConfirmar, botonRegresar, botonCalcular;
-    
-    public InterfazAgregarAlCarrito(int iteradorLista, boolean ActivarBotones){
-        this.productosEnCarrito = InterfazBienvenida.productos_carrito;
-        this.productosDisponible = InterfazBienvenida.productos_disponibles;
-        this.iteradorLista =  iteradorLista;
+    public InterfazAgregar(int indiceProducto, boolean Activador){
+        
+        this.indiceArticulo = indiceProducto;
+        InterfazAgregar.productoAAgregar = InterfazInicio.productosAMostrar;
+        InterfazAgregar.articuloComprar = InterfazInicio.productosAComprar;
+        this.ActivadorEntradasSalidas = Activador;
+        
         crearVentana();
         agregarPanel();
         colocarEtiquetas();
+        colocarBotones(ActivadorEntradasSalidas);
+        eventoBotones(ActivadorEntradasSalidas);
         colocarEntradasDatos();
-        colocarBotones(ActivarBotones);
-   
+        colocarEntradasSalidas();
     }
     
-    /**
-     * metodo para crear la ventana que saremos de esta interfaz
-     */
     private void crearVentana(){
-        ventanaCarrito = new JFrame("Ventana Menu");
+        ventanaCarrito = new JFrame("Agregar Producto");
         ventanaCarrito.setSize(930, 420);
         ventanaCarrito.setLocationRelativeTo(null);
         Image mercado = Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alan\\Documents"
@@ -46,11 +46,7 @@ public class InterfazAgregarAlCarrito extends JFrame{
         ventanaCarrito.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventanaCarrito.setVisible(true);
     }
-    
-    /**
-     * metodo que le agrega una JPanel a nuestra ventana para poder agregar los elementos que 
-     * necesitamos sobre ella 
-     */
+       
     private void agregarPanel(){
         plantillaCarrito = new JPanel();
         plantillaCarrito.setBackground(Color.decode("#000080"));
@@ -59,14 +55,14 @@ public class InterfazAgregarAlCarrito extends JFrame{
     }
 
     private void colocarEtiquetas(){
-        producto = new ImageIcon(productosDisponible.listaProductos.get(iteradorLista).
+        producto = new ImageIcon(productoAAgregar.ListaDeProductos.get(indiceArticulo).
                 ruta_Imagen_Producto);
         imagenProducto = new JLabel(new ImageIcon(producto.getImage().getScaledInstance
         (200,200, Image.SCALE_SMOOTH)));
         imagenProducto.setBounds(20, 20, 200, 260);
         
-        idProducto = new JLabel("ID: " + productosDisponible.listaProductos.get
-                (iteradorLista).id_Producto);
+        idProducto = new JLabel("ID: " + productoAAgregar.ListaDeProductos.get
+                (indiceArticulo).id_Producto);
         idProducto.setForeground(Color.WHITE);
         idProducto.setHorizontalAlignment(JLabel.CENTER);
         idProducto.setBackground(Color.BLACK);
@@ -74,8 +70,8 @@ public class InterfazAgregarAlCarrito extends JFrame{
         idProducto.setBounds(240, 40, 150, 40);
         idProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        nombreProducto = new JLabel("Nombre: " + productosDisponible.listaProductos.get
-                (iteradorLista).nombre_Producto);
+        nombreProducto = new JLabel("Nombre: " + productoAAgregar.ListaDeProductos.get
+                (indiceArticulo).nombre_Producto);
         nombreProducto.setForeground(Color.WHITE);
         nombreProducto.setBackground(Color.BLACK);
         nombreProducto.setHorizontalAlignment(JLabel.CENTER);
@@ -91,8 +87,8 @@ public class InterfazAgregarAlCarrito extends JFrame{
         colorProducto.setBounds(240, 110, 150, 40);
         colorProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
-        precioProducto = new JLabel("Precio: " + productosDisponible.listaProductos.get
-                (iteradorLista).precio_Producto);
+        precioProducto = new JLabel("Precio: " + productoAAgregar.ListaDeProductos.get
+                (indiceArticulo).precio_Producto);
         precioProducto.setForeground(Color.WHITE);
         precioProducto.setBackground(Color.BLACK);
         precioProducto.setHorizontalAlignment(JLabel.CENTER);
@@ -116,6 +112,9 @@ public class InterfazAgregarAlCarrito extends JFrame{
         apagarProducto.setBounds(240, 250, 460, 40);
         apagarProducto.setFont(new Font("Bell MT", Font.ITALIC, 20));
         
+    }
+    
+    private void colocarEntradasSalidas(){
         plantillaCarrito.add(idProducto);
         plantillaCarrito.add(nombreProducto);
         plantillaCarrito.add(colorProducto);
@@ -123,21 +122,12 @@ public class InterfazAgregarAlCarrito extends JFrame{
         plantillaCarrito.add(cantidadProducto);
         plantillaCarrito.add(apagarProducto);
         plantillaCarrito.add(imagenProducto);
-    }
-    
-    private void colocarEntradasDatos(){
-        cantidadProductoDeseado = new JTextField();
-        cantidadProductoDeseado.setHorizontalAlignment(JTextField.CENTER);
-        cantidadProductoDeseado.setBounds(570, 180, 130, 40);
-        cantidadProductoDeseado.setFont(new Font("Bell MT", Font.ITALIC, 15));
-        
-        colorProductoDeseado = new JComboBox<>(productosDisponible.listaProductos.get
-                (iteradorLista).colores_Producto);
-        colorProductoDeseado.setBounds(420, 110, 280, 40);
-        colorProductoDeseado.setFont(new Font("Bell MT", Font.PLAIN, 15));
-        
         plantillaCarrito.add(cantidadProductoDeseado);
         plantillaCarrito.add(colorProductoDeseado);
+        plantillaCarrito.add(botonConfirmar);
+        plantillaCarrito.add(botonCalcular);
+        plantillaCarrito.add(botonRegresar);
+        
     }
     
     private void colocarBotones(boolean activarBotones){
@@ -156,6 +146,22 @@ public class InterfazAgregarAlCarrito extends JFrame{
         botonRegresar.setFont(new Font("Bell MT", Font.ROMAN_BASELINE, 15));
         botonRegresar.setEnabled(activarBotones);
         
+    }
+    
+    private void colocarEntradasDatos(){
+        cantidadProductoDeseado = new JTextField(productoAAgregar.ListaDeProductos.get
+                (indiceArticulo).stock_Producto);
+        cantidadProductoDeseado.setHorizontalAlignment(JTextField.CENTER);
+        cantidadProductoDeseado.setBounds(570, 180, 130, 40);
+        cantidadProductoDeseado.setFont(new Font("Bell MT", Font.ITALIC, 15));
+        
+        colorProductoDeseado = new JComboBox<>(productoAAgregar.ListaDeProductos.get
+                (indiceArticulo).colores_Producto);
+        colorProductoDeseado.setBounds(420, 110, 280, 40);
+        colorProductoDeseado.setFont(new Font("Bell MT", Font.PLAIN, 15));
+    }
+    
+    private void eventoBotones(boolean activarBotones){
         ActionListener calcularCosto;
         calcularCosto = (ActionEvent e) -> {
             String confirmarVacio = cantidadProductoDeseado.getText();
@@ -166,15 +172,15 @@ public class InterfazAgregarAlCarrito extends JFrame{
                         JOptionPane.ERROR_MESSAGE);    
             }
             else{
-                int confimarProducto = productosEnCarrito.buscar_indice_carrito
-                        (productosDisponible.listaProductos.get(iteradorLista).id_Producto);
+                int confimarProducto = articuloComprar.posicionArticuloPorID
+                        (productoAAgregar.ListaDeProductos.get(indiceArticulo).id_Producto);
                 if (confimarProducto == -1){
                     // Producto Nuevo
                     int cantidadDeseada = Integer.parseInt(cantidadProductoDeseado.getText());
-                    if(cantidadDeseada <= productosDisponible.listaProductos.get
-                        (iteradorLista).stock_Producto){
-                        float cuenta = cantidadDeseada * productosDisponible.listaProductos.get
-                        (iteradorLista).precio_Producto;
+                    if(cantidadDeseada <= productoAAgregar.ListaDeProductos.get
+                        (indiceArticulo).stock_Producto){
+                        float cuenta = cantidadDeseada * productoAAgregar.ListaDeProductos.get
+                        (indiceArticulo).precio_Producto;
                         apagarProducto.setText("A pagar: " + cuenta);
                     }
                     else{
@@ -184,15 +190,15 @@ public class InterfazAgregarAlCarrito extends JFrame{
                     }
                 }else{
                     //el producto ya exixiste
-                    int cantidadSuma = productosEnCarrito.carrito_de_Productos.get
-                            (confimarProducto).cantidad_ProductoCarrito + (Integer.parseInt
+                    int cantidadSuma = articuloComprar.ListaDeProductos.get
+                            (confimarProducto).stock_Producto + (Integer.parseInt
                             (cantidadProductoDeseado.getText()));
-                    if(cantidadSuma <= productosDisponible.listaProductos.get
-                        (iteradorLista).stock_Producto){
+                    if(cantidadSuma <= productoAAgregar.ListaDeProductos.get
+                        (indiceArticulo).stock_Producto){
                         int cantidadDeseada = Integer.parseInt(cantidadProductoDeseado.
                                 getText());
-                        float cuenta = cantidadDeseada * productosDisponible.listaProductos.get
-                        (iteradorLista).precio_Producto;
+                        float cuenta = cantidadDeseada * productoAAgregar.ListaDeProductos.get
+                        (indiceArticulo).precio_Producto;
                         apagarProducto.setText("A pagar: " + cuenta);
                     }
                     else{
@@ -203,7 +209,6 @@ public class InterfazAgregarAlCarrito extends JFrame{
                 }
             }   
         };
-        
         botonCalcular.addActionListener(calcularCosto);
         
         ActionListener RegresarAlMenu;
@@ -211,11 +216,7 @@ public class InterfazAgregarAlCarrito extends JFrame{
             InterfazMenu ventanaMenu = new InterfazMenu(activarBotones);
             ventanaCarrito.dispose();
         };
-        
         botonRegresar.addActionListener(RegresarAlMenu);
-       
-        
-        
         
         ActionListener agregarProductoAlCarrito;
         agregarProductoAlCarrito = (ActionEvent e) -> {
@@ -226,17 +227,18 @@ public class InterfazAgregarAlCarrito extends JFrame{
                         JOptionPane.ERROR_MESSAGE);    
             }
             else{
-                float cuentaApagar = (Integer.parseInt(confirmarVacio)) * productosDisponible.
-                        listaProductos.get(iteradorLista).precio_Producto;
-                        
-                productoSelecionado = new Producto_del_Carrito(productosDisponible.
-                        listaProductos.get(iteradorLista).id_Producto, productosDisponible.
-                        listaProductos.get(iteradorLista).nombre_Producto, productosDisponible.
-                        listaProductos.get(iteradorLista).ruta_Imagen_Producto, 
-                        String.valueOf(colorProductoDeseado.getSelectedItem()), 
-                        Integer.parseInt(confirmarVacio), productosDisponible.listaProductos.get
-                        (iteradorLista).precio_Producto);
-                productosEnCarrito.agregarProductoCarrito(productoSelecionado);
+                   
+                productoSelecionado = new ProductoGeneral(productoAAgregar.ListaDeProductos.get
+                        (indiceArticulo).id_Producto,
+                        productoAAgregar.ListaDeProductos.get(indiceArticulo).nombre_Producto, 
+                        String.valueOf(colorProductoDeseado.getSelectedItem()),
+                        productoAAgregar.ListaDeProductos.get(indiceArticulo).
+                        ruta_Imagen_Producto,
+                        productoAAgregar.ListaDeProductos.get(indiceArticulo).
+                        descripcion_Producto,
+                        productoAAgregar.ListaDeProductos.get(indiceArticulo).precio_Producto,
+                        Integer.parseInt(confirmarVacio));
+                articuloComprar.agregarProductosLista(productoSelecionado);
                 
                 JOptionPane.showMessageDialog(null, "Producto añadido al carrito de forma"
                         + " exitosa", "Operacion EXITOSA", 
@@ -245,15 +247,8 @@ public class InterfazAgregarAlCarrito extends JFrame{
                 InterfazMenu ventanaMenu = new InterfazMenu(activarBotones);
                 ventanaCarrito.dispose();
             }
-            
         };
-        
         botonConfirmar.addActionListener(agregarProductoAlCarrito);
-        
-        
-        plantillaCarrito.add(botonConfirmar);
-        plantillaCarrito.add(botonCalcular);
-        plantillaCarrito.add(botonRegresar);
-        
     }
+    
 }

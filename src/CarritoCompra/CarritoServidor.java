@@ -111,36 +111,6 @@ public class CarritoServidor extends Clases_del_Servidor {
                         + "Direccion del cliente: " + cliente.getInetAddress() + " en el "
                         + "Puerto: " + cliente.getPort());
 
-                /**
-                 * Buffer para guardar los datos provenientes por el teclado
-                 */
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-                // Comprobamos que ningun elemnto de nuestra lista de productos este sin stock 
-                // y si lo esta decidimos si agregamos mas elementos al stock o solo lo 
-                // eliminamos 
-                for (int i = 0; i < listProducto.listaProductos.size(); i++) {
-
-                    //  Comprobamos si es que hay algun producto que no tenga stock
-                    if (listProducto.listaProductos.get(i).stock_Producto == 0) {
-                        System.out.println("\nDesea agregar mas unidades al produto: "
-                                + listProducto.listaProductos.get(i).nombre_Producto
-                                + " Si = 1 No = 0");
-                        int pregunta = Integer.parseInt(br.readLine());
-                        if (pregunta == 1) {
-                            System.out.println("\nCuantos elementos desea agregar: ");
-                            int cantidad = Integer.parseInt(br.readLine());
-                            listProducto.agregar_Stock_Producto(i, cantidad);
-                            System.out.println("El producto: " + listProducto.listaProductos.
-                                    get(i).nombre_Producto + " ahora tiene mas disponibilidad");
-                        } else {
-                            System.out.println("\n El producto: " + listProducto.listaProductos.
-                                    get(i).nombre_Producto + " ya no esta disponible");
-                            listProducto.eliminar_Producto_sin_stock(i);
-                        }
-                    }
-                }// cierre del for 
-
                 boolean accion = true;
                 do {
 
@@ -164,7 +134,6 @@ public class CarritoServidor extends Clases_del_Servidor {
                              * Aceptamos una nueva conexion de tipo socket para poder mandar los
                              * archivos al cliente
                              */
-                            cliente = servidor.accept();
                             /**
                              * Esto es lo que haremos siempre que el servidor
                              * recibe 1 como respuesta del cliente, esto nos
@@ -189,6 +158,8 @@ public class CarritoServidor extends Clases_del_Servidor {
                              * Preparamos las variables con los datos que vamos
                              * a necesitar para mandarlas al cliente
                              */
+                            cliente = servidor.accept();
+                            
                             File archivo_al_cliente = new File("C:\\Users\\Alan\\Documents"
                                     + "\\noveno_semestre\\Redes 2\\practica1\\CarritoCompra\\src"
                                     + "\\Productos_en_servidor\\"
@@ -238,7 +209,7 @@ public class CarritoServidor extends Clases_del_Servidor {
                             
                             System.out.println("El cliente nos ha pedido la opcion 1\nMandamos"
                                     + "el archivo " + nombre_archivo);
-                            System.out.print("\n\nArchivo enviado\n");
+                            System.out.print("\nArchivo enviado\n");
                             dos_envio.close();
                             dis_envio.close();
 
@@ -316,6 +287,8 @@ public class CarritoServidor extends Clases_del_Servidor {
                                         cantidad_ProductoCarrito;
                             }
 
+
+/*
                             for (int i = 0; i < listProducto.listaProductos.size(); i++) {
 
                                 //  Comprobamos si es que hay algun producto que no tenga stock
@@ -339,7 +312,7 @@ public class CarritoServidor extends Clases_del_Servidor {
                                     }
                                 }
                             }// cierre del for 
-                            
+  */                          
                             /**
                              * Mandamos de nuevo nuestra lista de productos al cliente
                              * actualizado
@@ -479,8 +452,6 @@ public class CarritoServidor extends Clases_del_Servidor {
                                         carrito_de_Productos.get(i).cantidad_ProductoCarrito);
                                 Precio = String.valueOf(productos_del_cliente.
                                         carrito_de_Productos.get(i).precio_Producto);
-                                Pago = String.valueOf(productos_del_cliente.
-                                        carrito_de_Productos.get(i).cantidad_pagar);
                                 stkID = new StringTokenizer(ID);
                                 stkProoducto = new StringTokenizer(Producto);
                                 stkColor = new StringTokenizer(Color);
@@ -498,8 +469,6 @@ public class CarritoServidor extends Clases_del_Servidor {
                                         nextToken())));
                                 tabla.addCell(new Cell().add(new Paragraph(stkPago.
                                         nextToken())));
-                                pagoTotal = pagoTotal + productos_del_cliente.
-                                        carrito_de_Productos.get(i).cantidad_pagar;
                             }
                             String tituloPago = "Total a pagar";
                             StringTokenizer stktp = new StringTokenizer(tituloPago);
@@ -518,7 +487,6 @@ public class CarritoServidor extends Clases_del_Servidor {
                             
                             break;
                         default:
-                            System.out.println("\n Adios");
                             accion = false;
                             break;
 
@@ -535,7 +503,7 @@ public class CarritoServidor extends Clases_del_Servidor {
                         cliente = servidor.accept();
                     }
                     else{
-                        System.out.println("\nSaliendo el bucle while");
+                        System.out.println("\nEl cliente se ha desconectado");
                     }
                     
                 } while (accion == true);
@@ -546,7 +514,5 @@ public class CarritoServidor extends Clases_del_Servidor {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(CarritoServidor.class.getName()).log(Level.SEVERE, null, ex);
         } 
-        
-    }
-                            
+    }                  
 }
